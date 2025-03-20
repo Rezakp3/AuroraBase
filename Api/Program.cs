@@ -35,7 +35,7 @@ builder.Services.AddControllers(opts =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    OpenApiSecurityScheme jwtSecurityScheme = new OpenApiSecurityScheme
+    OpenApiSecurityScheme jwtSecurityScheme = new()
     {
         Scheme = "bearer",
         BearerFormat = "JWT",

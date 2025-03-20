@@ -22,5 +22,5 @@ public partial class Device : BaseEntity<long>
 
     public DateTime? CreateDate { get; set; }
 
-    public virtual User User { get; set; } = null!;
+    public virtual User User { get; set; } 
 }

@@ -2,7 +2,7 @@
 
 namespace Core.Enums;
 
-public enum EUserSex
+public enum EUserSex : byte
 {
     [Display(Name = "نامشخص")]
     Unknown = 0,

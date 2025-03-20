@@ -1,19 +1,18 @@
-﻿namespace Core.Entities.Auth;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace Core.Entities.Auth;
 
 public partial class Auth : BaseEntity<long>
 {
-    public string PhoneNo { get; set; } = null!;
+    public string PhoneNo { get; set; } 
     public Guid BusinessKey { get; set; }
-
     public Guid UserId { get; set; }
-    public int? LoginCode { get; set; }
-    public int LoginCodeTryCount { get; set; }
-    public DateTime? LoginCodeExpirationDate { get; set; }
-    public DateTime? CreateDate { get; set; }
-    public string? Password { get; set; }
-    public string? Salt { get; set; }
+    public DateTime CreateDate { get; set; } = DateTime.Now;
     public string? RefreshToken { get; set; }
     public DateTime? RefreshTokenExpirationDate { get; set; }
 
-    public virtual User User { get; set; } = null!;
+    [ForeignKey(nameof(UserId))]
+    public virtual User User { get; set; } 
+    [ForeignKey(nameof(BusinessKey))]
+    public virtual Business Business { get; set; } 
 }

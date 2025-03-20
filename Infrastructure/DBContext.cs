@@ -1,5 +1,8 @@
 ﻿using Core.Entities.Auth;
+using Core.Entities.Relations;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 
 namespace Infrastructure;
 
@@ -15,6 +18,8 @@ public class DBContext : DbContext
     #region Auth
 
     public virtual DbSet<Auth> Auth { get; set; }
+    public virtual DbSet<AuthOtp> AuthOtp { get; set; }
+    public virtual DbSet<AuthPassword> AuthPassword { get; set; }
     public virtual DbSet<Business> Businesses { get; set; }
     public virtual DbSet<GroupClaim> GroupClaims { get; set; }
     public virtual DbSet<RoleClaim> RoleClaims { get; set; }
@@ -22,10 +27,9 @@ public class DBContext : DbContext
     public virtual DbSet<Claim> Claims { get; set; }
     public virtual DbSet<Device> Devices { get; set; }
     public virtual DbSet<Group> Groups { get; set; }
-    public virtual DbSet<InqueryUser> InqueryUsers { get; set; }
-    public virtual DbSet<LogService> LogServices { get; set; }
     public virtual DbSet<Menu> Menus { get; set; }
     public virtual DbSet<MenuService> MenuServices { get; set; }
+    public virtual DbSet<Profile> Profiles { get; set; }
     public virtual DbSet<Province> Provinces { get; set; }
     public virtual DbSet<Role> Roles { get; set; }
     public virtual DbSet<RoleService> RoleServices { get; set; }
@@ -40,6 +44,7 @@ public class DBContext : DbContext
     #endregion
     protected override void OnModelCreating(ModelBuilder builder)
     {
+        builder.ApplyConfigurationsFromAssembly(typeof(DBContext).Assembly);
     }
 
     #region save change overrides
