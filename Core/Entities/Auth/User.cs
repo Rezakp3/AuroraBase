@@ -1,43 +1,23 @@
-﻿using Core.Entities.Relations;
-using Core.Enums;
+﻿using Core.Enums;
 
 namespace Core.Entities.Auth;
 
-public partial class User : BaseEntity<Guid>
+public class User : BaseEntityWithDate<long>
 {
-    public string PhoneNo { get; set; } 
+    #region Properties
 
-    public string? Address { get; set; }
+    public DateTime LastLoginDate { get; set; }
+    public bool IsDeleted { get; set; }
+    public EUserStatus Status { get; set; }
 
-    public string? Email { get; set; }
-
-    public DateTime? CreateDate { get; set; } = DateTime.Now;
-
-    public EUserStatus? Status { get; set; }
-
-    public Guid? ParentId { get; set; }
-
-    public string? Username { get; set; }
-
-    public Guid? BusinessKey { get; set; }
+    #endregion
 
     #region Relations
 
-    public virtual Auth? Auth { get; set; }
-
-    public virtual User? Parent { get; set; }
-    public virtual ICollection<User> Childs { get; set; } = [];
-
-    public virtual ICollection<Device> Devices { get; set; } = [];
-
-    public virtual ICollection<UserClaim> UserClaims { get; set; } = [];
-    public virtual ICollection<Claim> Claims { get; set; } = [];
-
-    public virtual ICollection<UserGroup> UserGroups { get; set; } = [];
-    public virtual ICollection<Group> Groups { get; set; } = [];
-
-    public virtual ICollection<UserRole> UserRoles { get; set; } = []; 
-    public virtual ICollection<Role> Roles { get; set; } = []; 
+    public ICollection<Role> Roles { get; set; }
+    public PasswordLogin PasswordLogin { get; set; }
+    public ICollection<RefreshToken> RefreshTokens { get; set; }
+    public ICollection<UserClaim> Claims { get; set; }
 
     #endregion
 }

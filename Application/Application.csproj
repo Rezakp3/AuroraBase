@@ -7,16 +7,21 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="12.4.1" />
+    <Compile Remove="Services\Base\**" />
+    <EmbeddedResource Remove="Services\Base\**" />
+    <None Remove="Services\Base\**" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Gateway\Gateway.csproj" />
-    <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
+    <PackageReference Include="MediatR" Version="13.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Base\" />
+    <Folder Include="Services\Auth\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
 </Project>

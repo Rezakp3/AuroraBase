@@ -1,13 +1,20 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
+﻿namespace Core.Entities;
 
-namespace Core.Entities;
-public interface IEntity<TKey>
+public interface IBaseEntity<T>
 {
-    public TKey Id { get; set; }
+    public T Id { get; set; }
 }
-public class BaseEntity<TKey> : IEntity<TKey>
+public interface IBaseEntityWithDate<T> : IBaseEntity<T>
 {
-    [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-    public required TKey Id { get; set; }
+    public DateTime CreatedDate { get; set; }
+}
+
+public class BaseEntity<T> : IBaseEntity<T>
+{
+    public T Id { get; set; }
+}
+
+public class BaseEntityWithDate<T> : BaseEntity<T>, IBaseEntityWithDate<T>
+{
+    public DateTime CreatedDate { get; set; }
 }

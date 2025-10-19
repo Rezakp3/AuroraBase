@@ -8,7 +8,6 @@ public static class DependencyInjection
 
     public static IServiceCollection AddGateway(this IServiceCollection services, AppSetting appSetting)
     {
-        services.AddTransient(x => new SmsSender(appSetting.Ghasedak));
 
         return services;
     }

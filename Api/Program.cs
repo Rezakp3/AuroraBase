@@ -1,13 +1,13 @@
 using Core.ViewModel.Base;
 using Core;
 using Gateway;
-using Infrastructure;
 using Microsoft.EntityFrameworkCore;
 using Application;
 using Core.CustomAttributes;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.FileProviders;
+using Infrastructure.EfConfigs;
 
 var builder = WebApplication.CreateBuilder(args);
 

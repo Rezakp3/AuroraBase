@@ -1,25 +1,19 @@
-﻿using Core.Entities.Relations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿namespace Core.Entities.Auth;
 
-namespace Core.Entities.Auth;
-
-public partial class Service : BaseEntity<int>
+public class Service : BaseEntity<int>
 {
-    public string Name { get; set; }
+    #region Properties
 
-    public string Pname { get; set; }
+    public string ServiceName { get; set; }
+    public string Description { get; set; }
+    public string Address { get; set; }
 
-    public string? MicroServiceName { get; set; }
+    #endregion
+    #region relations
 
-    public string? Description { get; set; }
-    public Guid BusinessKey { get; set; }
+    public ICollection<Menu> Menus { get; set; }
+    public ICollection<Role> Roles { get; set; }
 
-    [ForeignKey(nameof(BusinessKey))]
-    public virtual Business Business { get; set; } 
-
-    public virtual ICollection<MenuService> MenuServices { get; set; } = [];
-    public virtual ICollection<Menu> Menues { get; set; } = [];
-
-    public virtual ICollection<RoleService> RoleServices { get; set; } = [];
-    public virtual ICollection<Role> Roles { get; set; } = [];
+    #endregion
 }
+

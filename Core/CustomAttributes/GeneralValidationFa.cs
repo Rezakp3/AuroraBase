@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using System.Numerics;
 using Core.Const;
 
 namespace Core.CustomAttributes;
