@@ -34,7 +34,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\Auth\Commands\Login\" />
+    <Folder Include="Features\Auth\Login\" />
   </ItemGroup>
 
 </Project>

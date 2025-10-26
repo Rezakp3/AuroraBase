@@ -31,11 +31,9 @@ public class ApiResult(int code = 200, bool isSuccess = true)
         => new(404, false) { Message = fieldName is null ? null : $"{fieldName} یافت نشد" };
 }
 
-public class ApiResult<T> : ApiResult
+public class ApiResult<T>(int code = 200, bool isSuccess = true) : ApiResult(code, isSuccess)
 {
     public T? Data { get; set; }
-
-    public ApiResult(int code = 200, bool isSuccess = true) : base(code, isSuccess) { }
 
     public static ApiResult<T> Success(T? data = default, string? message = null)
         => new(200, true) { Data = data, Message = message };

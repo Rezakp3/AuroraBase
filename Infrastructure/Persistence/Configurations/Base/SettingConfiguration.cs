@@ -37,9 +37,6 @@ public class SettingConfiguration : IEntityTypeConfiguration<Setting>
         builder.Property(x => x.IsEncrypted)
             .HasDefaultValue(false);
 
-        builder.Property(x => x.IsVisible)
-            .HasDefaultValue(true);
-
         // Composite unique index on Group + Key
         builder.HasIndex(x => new { x.Group, x.Key })
             .IsUnique()
