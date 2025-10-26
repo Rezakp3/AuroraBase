@@ -7,21 +7,34 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Services\Base\**" />
-    <EmbeddedResource Remove="Services\Base\**" />
-    <None Remove="Services\Base\**" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
     <PackageReference Include="MediatR" Version="13.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\Auth\" />
+    <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
+  <!-- ✅ اضافه کنید: EmbeddedResource برای فایل‌های .resx -->
   <ItemGroup>
-    <ProjectReference Include="..\Core\Core.csproj" />
+    <EmbeddedResource Update="Resources\**\*.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\Resource-fa.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource-fa.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Resource-fa.resx">
+      <LastGenOutput>Resource-fa.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Features\Auth\Commands\Login\" />
   </ItemGroup>
 
 </Project>

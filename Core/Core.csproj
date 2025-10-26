@@ -6,15 +6,18 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <!-- ✅ فقط وابستگی مجاز: Utils -->
+  <ItemGroup>
+    <ProjectReference Include="..\Utils\Utils.csproj" />
+  </ItemGroup>
+
+  <!-- ❌ همه اینها حذف شوند -->
+  <!--
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="9.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Abstractions" Version="9.0.10" />
   </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\Utils\Utils.csproj" />
-  </ItemGroup>
-
+  -->
 </Project>

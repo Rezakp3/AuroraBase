@@ -1,109 +1,73 @@
-using Core.ViewModel.Base;
-using Core;
-using Gateway;
-using Microsoft.EntityFrameworkCore;
+﻿using Api.Extentions;
 using Application;
-using Core.CustomAttributes;
-using Microsoft.OpenApi.Models;
+using Application.Common.Models;
+using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.Extensions.FileProviders;
-using Infrastructure.EfConfigs;
+using Microsoft.OpenApi.Models;
+using Utils.CustomAttributes;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
-// get appsetting and create init setting
+// Configuration
 var appSetting = builder.Configuration.Get<AppSetting>() ?? new();
 builder.Services.AddSingleton(appSetting);
 
-builder.Services.AddCore();
-builder.Services.AddGateway(appSetting);
+// Add Layers
 builder.Services.AddApplication();
+builder.Services.AddInfrastructure(builder.Configuration);
+
 builder.Services.AddHttpContextAccessor();
 
-builder.Services.AddDbContext<DBContext>(x =>
-    {
-        x.UseSqlServer(appSetting.ConnectionStrings.DefaultConnection);
-        x.EnableSensitiveDataLogging();
-    });
-
+// Controllers & Validation
 builder.Services.AddControllers(opts => 
-    opts.Filters.Add(typeof(ValidateModelStateAttribute)));
+    opts.Filters.Add<ValidateModelStateAttribute>()); 
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
-    OpenApiSecurityScheme jwtSecurityScheme = new()
+    var jwtSecurityScheme = new OpenApiSecurityScheme
     {
         Scheme = "bearer",
         BearerFormat = "JWT",
         Name = "JWT Authentication",
         In = ParameterLocation.Header,
         Type = SecuritySchemeType.Http,
-        Description = "Put *ONLY* your JWT Bearer token on textbox below!",
-
+        Description = "Put **ONLY** your JWT Bearer token below!",
         Reference = new OpenApiReference
         {
             Id = JwtBearerDefaults.AuthenticationScheme,
             Type = ReferenceType.SecurityScheme
         }
     };
+    
     c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
-                    { jwtSecurityScheme, Array.Empty<string>() }
-                });
-    c.DescribeAllParametersInCamelCase();
-    c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApiCore", Version = "v1.0.1" });
-
-    c.EnableAnnotations();
+    {
+        { jwtSecurityScheme, Array.Empty<string>() }
+    });
+    
+    c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuroraBase API", Version = "v1.0" });
 });
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+// ✅ Seed کردن داده‌ها در Startup
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger(c =>
-    {
-        c.PreSerializeFilters.Add((swaggerDoc, httpReq) =>
-        {
-            swaggerDoc.Servers = [
-                            new() { Url = $"{httpReq.Scheme}://{httpReq.Host.Value}" },
-                            new() { Url = $"{httpReq.Scheme}s://{httpReq.Host.Value}" },
-                        ];
-        });
-    });
-    app.UseSwaggerUI(c =>
-    {
-        c.SwaggerEndpoint("v1/swagger.json", "Api v1");
-    });
+    await Infrastructure.DependencyInjection.SeedDatabaseAsync(app.Services);
 }
 
-if (!Path.Exists(Path.Combine(Directory.GetCurrentDirectory(), "assets")))
-    Directory.CreateDirectory(Path.Combine(Directory.GetCurrentDirectory(), "assets"));
-
-app.UseStaticFiles(new StaticFileOptions()
+// Middleware Pipeline
+if (app.Environment.IsDevelopment())
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "assets")),
-    RequestPath = new PathString("/assets"),
-});
-
-app.Use(async (context, next) =>
-{
-    context.Response.Headers.Append("X-Content-Type-Options", "nosniff");
-    context.Response.Headers.Append("X-XSS-Protection", "1; mode=block");
-    context.Response.Headers.Append("Content-Security-Policy", "default-src 'self';");
-    await next();
-});
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
 
 app.UseHttpsRedirection();
-
 app.UseAuthentication();
 app.UseAuthorization();
-
 app.MapControllers();
 
 app.Run();

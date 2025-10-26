@@ -1,7 +1,7 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Core.Const;
+﻿using Core.Const;
+using System.ComponentModel.DataAnnotations;
 
-namespace Core.CustomAttributes;
+namespace Utils.CustomAttributes;
 
 public class RangeFaAttribute(double minimum, double maximum) : RangeAttribute(minimum, maximum)
 {

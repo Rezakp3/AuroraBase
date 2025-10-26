@@ -1,4 +1,7 @@
-﻿namespace Core.Entities.Auth;
+﻿using Core.Entities.Auth.Relation;
+using Core.Interfaces;
+
+namespace Core.Entities.Auth;
 
 public class Role : BaseEntity<int>
 {
@@ -9,13 +12,12 @@ public class Role : BaseEntity<int>
 
     #endregion
 
-
     #region relation
 
-    public ICollection<Menu> Menus { get; set; } = [];
-    public ICollection<Service> Services { get; set; } = [];
+    public ICollection<RoleMenu> RoleMenus { get; set; } = [];
+    public ICollection<RoleService> RoleServices { get; set; } = [];
+    public ICollection<UserRole> UserRoles { get; set; } = [];
     public ICollection<RoleClaim> Claims { get; set; } = [];
-    public ICollection<User> Users { get; set; } = [];
 
     #endregion
 }

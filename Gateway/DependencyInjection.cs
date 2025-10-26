@@ -1,4 +1,4 @@
-﻿using Core.ViewModel.Base;
+﻿using Application.Common.Models;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Gateway;

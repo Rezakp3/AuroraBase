@@ -1,13 +1,6 @@
-﻿namespace Core.Entities;
+﻿using Core.Interfaces;
 
-public interface IBaseEntity<T>
-{
-    public T Id { get; set; }
-}
-public interface IBaseEntityWithDate<T> : IBaseEntity<T>
-{
-    public DateTime CreatedDate { get; set; }
-}
+namespace Core.Entities;
 
 public class BaseEntity<T> : IBaseEntity<T>
 {

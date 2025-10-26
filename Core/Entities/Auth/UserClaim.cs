@@ -9,7 +9,6 @@ public class UserClaim : BaseEntity<int>
 
     #endregion
 
-
     #region Relation
 
     public long UserId { get; set; }

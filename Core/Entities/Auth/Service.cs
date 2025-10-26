@@ -1,4 +1,6 @@
-﻿namespace Core.Entities.Auth;
+﻿using Core.Entities.Auth.Relation;
+
+namespace Core.Entities.Auth;
 
 public class Service : BaseEntity<int>
 {
@@ -9,10 +11,11 @@ public class Service : BaseEntity<int>
     public string Address { get; set; }
 
     #endregion
+
     #region relations
 
-    public ICollection<Menu> Menus { get; set; }
-    public ICollection<Role> Roles { get; set; }
+    public ICollection<MenuService> MenuServices { get; set; } = [];
+    public ICollection<RoleService> RoleServices { get; set; } = [];
 
     #endregion
 }

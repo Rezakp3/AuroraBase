@@ -8,6 +8,7 @@ public class RoleClaim : BaseEntity<int>
     public string Value { get; set; }
 
     #endregion
+
     #region relation
     public int RoleId { get; set; }
     public Role Role { get; set; } 
