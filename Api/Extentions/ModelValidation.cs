@@ -15,7 +15,7 @@ public class ValidateModelStateAttribute : ActionFilterAttribute
                 Message = "خطای اعتبار سنجی",
                 ValidationErrors = [.. context.ModelState.Select(s => new ValidationError()
                 {
-                    Errors = [.. s.Value.Errors.Select(e => e.ErrorMessage)],
+                    Errors = [.. s.Value?.Errors.Select(e => e.ErrorMessage)??[]],
                     PropertyName = s.Key
                 })],
             });
