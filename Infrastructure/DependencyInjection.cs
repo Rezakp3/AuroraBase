@@ -1,12 +1,14 @@
-﻿using Infrastructure.Persistence;
-using Infrastructure.Persistence.Repositories;
+﻿using Application.Common.Interfaces.Generals;
+using Application.Common.Interfaces.Repositories;
+using Application.Common.Interfaces.Services.Caching;
+using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interceptors;
+using Infrastructure.Persistence.Repositories;
 using Infrastructure.Persistence.Seeders;
+using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Application.Common.Interfaces.Generals;
-using Application.Common.Interfaces.Repositories;
 
 namespace Infrastructure;
 
@@ -39,6 +41,14 @@ public static class DependencyInjection
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<ISettingRepository, SettingRepository>();
 
+        // ✅ ثبت Distributed Memory Cache
+        services.AddDistributedMemoryCache();
+
+        // ✅ ثبت Memory Cache برای قابلیت‌های پیشرفته
+        services.AddMemoryCache();
+
+        // ✅ ثبت سرویس مدیریت کش
+        services.AddSingleton<ICacheService, CacheService>();
         return services;
     }
 
