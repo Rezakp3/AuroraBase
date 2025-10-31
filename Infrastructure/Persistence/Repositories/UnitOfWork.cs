@@ -14,6 +14,7 @@ public class UnitOfWork(MyContext context, IServiceProvider serviceProvider) : I
     public IMenuRepository Menus => GetService<IMenuRepository>();
     public IServiceRepository Services => GetService<IServiceRepository>();
     public IRefreshTokenRepository RefreshTokens => GetService<IRefreshTokenRepository>();
+    public ISettingRepository Settings => GetService<ISettingRepository>();
 
     #region navigations
     public int SaveChanges()

@@ -62,4 +62,14 @@ public interface ISettingRepository : IRepository<Setting, int>
     /// لیست تمام گروه‌های موجود (یونیک)
     /// </summary>
     Task<List<string>> GetAllGroupsAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// بارگذاری اولیه تمام تنظیمات در Cache (فراخوانی در Startup)
+    /// </summary>
+    Task WarmupCacheAsync(CancellationToken cancellationToken = default);
+
+    /// <summary>
+    /// پاک کردن کل Cache
+    /// </summary>
+    void ClearCache();
 }

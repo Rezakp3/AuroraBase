@@ -13,6 +13,7 @@ public interface IUnitOfWork : IDisposable
     IMenuRepository Menus { get; }
     IServiceRepository Services { get; }
     IRefreshTokenRepository RefreshTokens { get; }
+    ISettingRepository Settings { get; }
     
     // Transaction Management
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);

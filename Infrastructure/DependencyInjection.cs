@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Application.Common.Interfaces.Generals;
+using Application.Common.Interfaces.Repositories;
 
 namespace Infrastructure;
 
@@ -30,8 +31,13 @@ public static class DependencyInjection
         services.AddScoped<IUnitOfWork, UnitOfWork>();
         services.AddScoped(typeof(IRepository<,>), typeof(Repository<,>));
 
-        // Data Seeding (اختیاری - در Startup)
-        // services.AddScoped<DefaultDataSeeder>();
+        // ✅ Repository های مشخص
+        services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IRoleRepository, RoleRepository>();
+        services.AddScoped<IMenuRepository, MenuRepository>();
+        services.AddScoped<IServiceRepository, ServiceRepository>();
+        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<ISettingRepository, SettingRepository>();
 
         return services;
     }
@@ -44,5 +50,9 @@ public static class DependencyInjection
         
         await context.Database.MigrateAsync();
         await DefaultDataSeeder.SeedAsync(context);
+
+        // ✅ Warmup Settings Cache
+        var settingRepo = scope.ServiceProvider.GetRequiredService<ISettingRepository>();
+        await settingRepo.WarmupCacheAsync();
     }
 }
