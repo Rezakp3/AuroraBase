@@ -1,5 +1,6 @@
 ﻿using Application.Common.Interfaces.Generals;
 using Application.Common.Interfaces.Repositories;
+using Application.Common.Interfaces.Services;
 using Application.Common.Interfaces.Services.Caching;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interceptors;
@@ -49,10 +50,14 @@ public static class DependencyInjection
 
         // ✅ ثبت سرویس مدیریت کش
         services.AddSingleton<ICacheService, CacheService>();
+
+        // ثبت CaptchaService
+        services.AddScoped<ICaptchaService, CaptchaService>();
+
         return services;
     }
 
-    // ✅ متد کمکی برای Seed کردن داده‌ها
+    //  متد کمکی برای Seed کردن داده‌ها
     public static async Task SeedDatabaseAsync(IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.CreateScope();
