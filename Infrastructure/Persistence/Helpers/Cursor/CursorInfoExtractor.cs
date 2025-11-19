@@ -8,7 +8,7 @@ public static class CursorInfoExtractor
     /// <summary>
     /// استخراج LastId و LastSortValue از آخرین آیتم
     /// </summary>
-    public static (object? lastId, object? lastSortValue) ExtractCursorInfo<TEntity>(
+    public static (object lastId, object lastSortValue) ExtractCursorInfo<TEntity>(
         List<TEntity> items,
         string sortBy,
         bool isSortingById) where TEntity : class
@@ -21,7 +21,7 @@ public static class CursorInfoExtractor
         var idProperty = typeof(TEntity).GetProperty("Id");
         var lastId = idProperty?.GetValue(lastItem);
 
-        object? lastSortValue = null;
+        object lastSortValue = null;
         if (!isSortingById)
         {
             var sortProperty = typeof(TEntity).GetProperty(sortBy);
@@ -34,7 +34,7 @@ public static class CursorInfoExtractor
     /// <summary>
     /// استخراج LastId و LastSortValue با Generic Type
     /// </summary>
-    public static (TKey? lastId, object? lastSortValue) ExtractCursorInfo<TEntity, TKey>(
+    public static (TKey? lastId, object lastSortValue) ExtractCursorInfo<TEntity, TKey>(
         List<TEntity> items,
         string sortBy,
         bool isSortingById) 
@@ -49,7 +49,7 @@ public static class CursorInfoExtractor
         var idProperty = typeof(TEntity).GetProperty("Id");
         var lastId = idProperty != null ? (TKey?)idProperty.GetValue(lastItem) : null;
 
-        object? lastSortValue = null;
+        object lastSortValue = null;
         if (!isSortingById)
         {
             var sortProperty = typeof(TEntity).GetProperty(sortBy);

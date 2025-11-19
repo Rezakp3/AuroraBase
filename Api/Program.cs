@@ -1,30 +1,30 @@
 ﻿using Api.Extentions;
 using Application;
-using Application.Common.Models;
+using Aurora.Jwt.Models;
 using Infrastructure;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
-using Utils.CustomAttributes;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Configuration
-var appSetting = builder.Configuration.Get<AppSetting>() ?? new();
-builder.Services.AddSingleton(appSetting);
+var services = builder.Services;
+services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+
 
 // Add Layers
-builder.Services.AddApplication();
-builder.Services.AddInfrastructure(builder.Configuration);
+services.AddApplication();
+services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddHttpContextAccessor();
+services.AddHttpContextAccessor();
 
 // Controllers & Validation
-builder.Services.AddControllers(opts => 
-    opts.Filters.Add<ValidateModelStateAttribute>()); 
+services.AddControllers(opts => 
+    opts.Filters.Add<ValidateModelStateAttribute>());
 
 // Swagger
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+services.AddEndpointsApiExplorer();
+services.AddSwaggerGen(c =>
 {
     var jwtSecurityScheme = new OpenApiSecurityScheme
     {
@@ -55,7 +55,7 @@ var app = builder.Build();
 // ✅ Seed کردن داده‌ها در Startup
 if (app.Environment.IsDevelopment())
 {
-    await Infrastructure.DependencyInjection.SeedDatabaseAsync(app.Services);
+    await app.Services.SeedDatabaseAsync();
 }
 
 // Middleware Pipeline

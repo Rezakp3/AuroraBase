@@ -64,7 +64,7 @@ public static class PaginationHelper
         IQueryable<TEntity> query,
         PagingOption pagingOption,
         string sortBy,
-        System.Reflection.PropertyInfo? sortProperty,
+        System.Reflection.PropertyInfo sortProperty,
         bool isSortingById) where TEntity : class
     {
         bool canUseCursor = pagingOption.LastId != null && 

@@ -16,7 +16,7 @@ public class User : BaseEntityWithDate<long>
 
     public ICollection<UserRole> UserRoles { get; set; } = [];
     public PasswordLogin PasswordLogin { get; set; }
-    public ICollection<RefreshToken> RefreshTokens { get; set; } = [];
+    public ICollection<Session> Sessions { get; set; } = [];
     public ICollection<UserClaim> Claims { get; set; } = [];
 
     #endregion

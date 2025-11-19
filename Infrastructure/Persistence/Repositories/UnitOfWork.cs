@@ -7,13 +7,13 @@ namespace Infrastructure.Persistence.Repositories;
 
 public class UnitOfWork(MyContext context, IServiceProvider serviceProvider) : IUnitOfWork
 {
-    private IDbContextTransaction? _transaction;
+    private IDbContextTransaction _transaction;
 
     public IUserRepository Users => GetService<IUserRepository>();
     public IRoleRepository Roles => GetService<IRoleRepository>();
     public IMenuRepository Menus => GetService<IMenuRepository>();
     public IServiceRepository Services => GetService<IServiceRepository>();
-    public IRefreshTokenRepository RefreshTokens => GetService<IRefreshTokenRepository>();
+    public ISessionRepository RefreshTokens => GetService<ISessionRepository>();
     public ISettingRepository Settings => GetService<ISettingRepository>();
 
     #region navigations

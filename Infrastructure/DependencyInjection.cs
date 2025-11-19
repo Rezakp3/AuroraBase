@@ -1,12 +1,11 @@
 ﻿using Application.Common.Interfaces.Generals;
 using Application.Common.Interfaces.Repositories;
-using Application.Common.Interfaces.Services;
-using Application.Common.Interfaces.Services.Caching;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interceptors;
 using Infrastructure.Persistence.Repositories;
+using Infrastructure.Persistence.Repositories.Base;
+using Infrastructure.Persistence.Repositories.Cached;
 using Infrastructure.Persistence.Seeders;
-using Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,11 +19,11 @@ public static class DependencyInjection
         IConfiguration configuration)
     {
         // DbContext با Interceptors
-        services.AddDbContext<Persistence.MyContext>(options =>
+        services.AddDbContext<MyContext>(options =>
         {
             options.UseSqlServer(
                 configuration.GetConnectionString("DefaultConnection"),
-                b => b.MigrationsAssembly(typeof(Persistence.MyContext).Assembly.FullName));
+                b => b.MigrationsAssembly(typeof(MyContext).Assembly.FullName));
             
             // ✅ اضافه کردن Interceptor
             options.AddInterceptors(new AuditableEntityInterceptor());
@@ -39,26 +38,21 @@ public static class DependencyInjection
         services.AddScoped<IRoleRepository, RoleRepository>();
         services.AddScoped<IMenuRepository, MenuRepository>();
         services.AddScoped<IServiceRepository, ServiceRepository>();
-        services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        services.AddScoped<ISessionRepository, SessionRepository>();
+
         services.AddScoped<ISettingRepository, SettingRepository>();
+        services.Decorate<ISettingRepository, CachedSettingRepository>();
 
-        // ✅ ثبت Distributed Memory Cache
-        services.AddDistributedMemoryCache();
+        services.AddScoped<IUserRoleRepository, UserRoleRepository>();
+        services.Decorate<IUserRoleRepository, CachedUserRoleRepository>();
 
-        // ✅ ثبت Memory Cache برای قابلیت‌های پیشرفته
-        services.AddMemoryCache();
-
-        // ✅ ثبت سرویس مدیریت کش
-        services.AddSingleton<ICacheService, CacheService>();
-
-        // ثبت CaptchaService
-        services.AddScoped<ICaptchaService, CaptchaService>();
-
+        services.AddScoped<IRoleServiceRepository, RoleServiceRepository>();
+        services.Decorate<IRoleServiceRepository, CachedRoleServiceRepository>();
         return services;
     }
 
     //  متد کمکی برای Seed کردن داده‌ها
-    public static async Task SeedDatabaseAsync(IServiceProvider serviceProvider)
+    public static async Task SeedDatabaseAsync(this IServiceProvider serviceProvider)
     {
         using var scope = serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<MyContext>();
@@ -68,6 +62,5 @@ public static class DependencyInjection
 
         // ✅ Warmup Settings Cache
         var settingRepo = scope.ServiceProvider.GetRequiredService<ISettingRepository>();
-        await settingRepo.WarmupCacheAsync();
     }
 }

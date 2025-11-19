@@ -1,5 +1,4 @@
-﻿using Application.Common.Interfaces.Services;
-using Application.Common.Models;
+﻿using Application.Common.Models;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 using System.Reflection;

@@ -3,50 +3,64 @@ using Core.Entities;
 
 namespace Application.Common.Interfaces.Repositories;
 
+/// <summary>
+/// رابط Repository برای مدیریت تنظیمات سیستم با قابلیت Cache
+/// </summary>
 public interface ISettingRepository : IRepository<Setting, int>
 {
+    #region Cache Management
+
+    /// <summary>
+    /// بارگذاری اولیه تمام تنظیمات در Cache (فراخوانی در Startup)
+    /// </summary>
+    Task WarmupCacheAsync(CancellationToken cancellationToken = default);
+
+    #endregion
+
+    #region Query Methods
+
     /// <summary>
     /// دریافت همه تنظیمات یک گروه خاص (پیش‌فرض: General)
     /// </summary>
     Task<List<Setting>> GetByGroupAsync(string group = "General", CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// دریافت همه تنظیمات یک گروه خاص به صورت آبجکت (پیش‌فرض: General)
+    /// دریافت همه تنظیمات یک گروه خاص به صورت آبجکت strongly-typed (پیش‌فرض: General)
     /// </summary>
     Task<T> GetByGroupAsync<T>(string group = "General", CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// دریافت یک تنظیم خاص با کلید (اگر گروه مشخص نشه از General استفاده می‌شه)
+    /// دریافت یک تنظیم خاص با گروه و کلید (پیش‌فرض: General)
     /// </summary>
     Task<Setting?> GetByKeyAsync(string key, string group = "General", CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// دریافت مقدار یک تنظیم خاص (فقط Value) - پیش‌فرض: General
-    /// </summary>
-    Task<string?> GetValueAsync(string key, string group = "General", CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// دریافت مقدار یه تنظیم خاص همراه با کست به تایپ مورد نظر (پیش‌فرض: General)
-    /// ** اگر تایپ مورد نظر قابل تبدیل نباشه اکسپشن میده
+    /// دریافت مقدار با تبدیل نوع - در صورت عدم تبدیل Exception میدهد
     /// </summary>
     Task<T?> GetValueAsync<T>(string key, string group = "General", CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// دریافت مقدار یه تنظیم خاص همراه با کست به تایپ مورد نظر (پیش‌فرض: General)
-    /// ** اگر تایپ مورد نظر قابل تبدیل نباشه مقدار دیفالت اون تایپ رو برمیگردونه
+    /// دریافت مقدار با تبدیل نوع - در صورت عدم تبدیل مقدار default نوع را برمیگرداند
     /// </summary>
     Task<T?> GetValueOrDefaultAsync<T>(string key, string group = "General", CancellationToken cancellationToken = default);
 
     /// <summary>
-    /// دریافت مقدار یه تنظیم خاص همراه با کست به تایپ مورد نظر (پیش‌فرض: General)
-    /// ** اگر تایپ مورد نظر قابل تبدیل نباشه مقدار دیفالت ارسالی رو برمیگردونه
+    /// دریافت مقدار با تبدیل نوع - در صورت عدم تبدیل مقدار defaultValue را برمیگرداند
     /// </summary>
     Task<T?> GetValueOrDefaultAsync<T>(string key, T? defaultValue, string group = "General", CancellationToken cancellationToken = default);
+
+    #endregion
+
+    #region Command Methods
 
     /// <summary>
     /// به‌روزرسانی مقدار یک تنظیم (پیش‌فرض: General)
     /// </summary>
     Task<bool> UpdateValueAsync(string key, string newValue, string group = "General", CancellationToken cancellationToken = default);
+
+    #endregion
+
+    #region Existence Checks
 
     /// <summary>
     /// چک کردن وجود یک گروه
@@ -63,13 +77,5 @@ public interface ISettingRepository : IRepository<Setting, int>
     /// </summary>
     Task<List<string>> GetAllGroupsAsync(CancellationToken cancellationToken = default);
 
-    /// <summary>
-    /// بارگذاری اولیه تمام تنظیمات در Cache (فراخوانی در Startup)
-    /// </summary>
-    Task WarmupCacheAsync(CancellationToken cancellationToken = default);
-
-    /// <summary>
-    /// پاک کردن کل Cache
-    /// </summary>
-    void ClearCache();
+    #endregion
 }

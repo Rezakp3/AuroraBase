@@ -22,7 +22,7 @@ public class UserConfig : IEntityTypeConfiguration<User>
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);
 
-        builder.HasMany(x => x.RefreshTokens)
+        builder.HasMany(x => x.Sessions)
             .WithOne(x => x.User)
             .HasForeignKey(x => x.UserId)
             .OnDelete(DeleteBehavior.Cascade);

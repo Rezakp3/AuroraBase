@@ -12,7 +12,7 @@ public interface IUnitOfWork : IDisposable
     IRoleRepository Roles { get; }
     IMenuRepository Menus { get; }
     IServiceRepository Services { get; }
-    IRefreshTokenRepository RefreshTokens { get; }
+    ISessionRepository RefreshTokens { get; }
     ISettingRepository Settings { get; }
     
     // Transaction Management

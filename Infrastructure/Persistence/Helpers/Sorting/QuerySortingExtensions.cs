@@ -14,7 +14,7 @@ public static class QuerySortingExtensions
     /// </summary>
     public static IQueryable<TEntity> ApplySorting<TEntity>(
         this IQueryable<TEntity> query,
-        string? sortBy,
+        string sortBy,
         SortOrder sortOrder) where TEntity : class
     {
         var validSortBy = ValidateSortField<TEntity>(sortBy);
@@ -29,7 +29,7 @@ public static class QuerySortingExtensions
     /// </summary>
     public static IQueryable<TEntity> ApplySortingWithSecondaryId<TEntity>(
         this IQueryable<TEntity> query,
-        string? sortBy,
+        string sortBy,
         SortOrder sortOrder) where TEntity : class
     {
         var validSortBy = ValidateSortField<TEntity>(sortBy);
@@ -54,7 +54,7 @@ public static class QuerySortingExtensions
     /// <summary>
     /// اعتبارسنجی فیلد مرتب‌سازی
     /// </summary>
-    public static string ValidateSortField<TEntity>(string? sortBy)
+    public static string ValidateSortField<TEntity>(string sortBy)
     {
         if (string.IsNullOrWhiteSpace(sortBy))
             return "Id";
@@ -66,7 +66,7 @@ public static class QuerySortingExtensions
     /// <summary>
     /// اعتبارسنجی و دریافت PropertyInfo
     /// </summary>
-    public static (string validSortBy, System.Reflection.PropertyInfo? propertyInfo) ValidateAndGetSortProperty<TEntity>(string? sortBy)
+    public static (string validSortBy, System.Reflection.PropertyInfo propertyInfo) ValidateAndGetSortProperty<TEntity>(string sortBy)
     {
         if (string.IsNullOrWhiteSpace(sortBy))
             sortBy = "Id";

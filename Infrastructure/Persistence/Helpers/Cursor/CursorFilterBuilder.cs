@@ -4,32 +4,26 @@ using Infrastructure.Persistence.Helpers.Expressions;
 
 namespace Infrastructure.Persistence.Helpers.Cursor;
 
-/// <summary>
-/// سازنده فیلترهای Cursor برای Pagination
-/// </summary>
 public static class CursorFilterBuilder
 {
-    /// <summary>
-    /// اعمال فیلتر Cursor بصورت Dynamic
-    /// </summary>
     public static IQueryable<TEntity> ApplyCursorFilter<TEntity>(
         this IQueryable<TEntity> query,
         object lastId,
-        object? lastSortValue,
+        object lastSortValue,
         string sortBy,
-        System.Reflection.PropertyInfo? sortProperty,
+        System.Reflection.PropertyInfo sortProperty,
         SortOrder sortOrder,
         bool isSortingById) where TEntity : class
     {
-        var parameter = System.Linq.Expressions.Expression.Parameter(typeof(TEntity), "x");
-        var idProperty = System.Linq.Expressions.Expression.Property(parameter, "Id");
+        var parameter = Expression.Parameter(typeof(TEntity), "x");
+        var idProperty = Expression.Property(parameter, "Id");
         
         // تبدیل lastId به نوع صحیح
         var idPropertyType = idProperty.Type;
         var convertedLastId = Convert.ChangeType(lastId, idPropertyType);
-        var lastIdConstant = System.Linq.Expressions.Expression.Constant(convertedLastId, idPropertyType);
+        var lastIdConstant = Expression.Constant(convertedLastId, idPropertyType);
 
-        System.Linq.Expressions.Expression filterExpression;
+        Expression filterExpression;
 
         if (isSortingById)
         {
@@ -54,7 +48,7 @@ public static class CursorFilterBuilder
             filterExpression = ExpressionBuilder.BuildIdFilter(idProperty, lastIdConstant, sortOrder);
         }
 
-        var lambda = System.Linq.Expressions.Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
+        var lambda = Expression.Lambda<Func<TEntity, bool>>(filterExpression, parameter);
         return query.Where(lambda);
     }
 }

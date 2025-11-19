@@ -14,7 +14,7 @@ public class MyContext(DbContextOptions<MyContext> options) : DbContext(options)
 
     public DbSet<User> Users => Set<User>();
     public DbSet<PasswordLogin> PasswordLogins => Set<PasswordLogin>();
-    public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+    public DbSet<Session> RefreshTokens => Set<Session>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<RoleClaim> RoleClaims => Set<RoleClaim>();
     public DbSet<Menu> Menus => Set<Menu>();

@@ -1,6 +1,6 @@
 ﻿namespace Core.Entities.Auth.Relation;
 
-public class RoleService
+public class RoleService : BaseEntity<int>
 {
     public int RoleId { get; set; }
     public int ServiceId { get; set; }

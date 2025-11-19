@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using System.Text.Json;
 
 namespace Utils.Helpers;
 
@@ -6,45 +7,49 @@ namespace Utils.Helpers;
 public static class ConvertExtensions
 {
     /// <summary>
-    /// تلاش می‌کند یک رشته را به نوع مشخص شده تبدیل کند.
+    /// تبدیل string به نوع مورد نظر
     /// </summary>
-    /// <param name="value">رشته حاوی مقدار تنظیمات.</param>
-    /// <param name="defaultValue">مقدار پیش‌فرضی که در صورت ناموفق بودن تبدیل برگردانده می‌شود.</param>
-    /// <typeparam name="T">نوعی که رشته باید به آن تبدیل شود.</typeparam>
-    /// <returns>مقدار تبدیل شده یا مقدار پیش‌فرض.</returns>
-    public static T ConvertTo<T>(this string? value, T defaultValue = default!) 
-        where T : IConvertible
+    public static T ConvertTo<T>(this string value)
     {
-        // ۱. بررسی مقدار Null یا خالی
         if (string.IsNullOrWhiteSpace(value))
-        {
-            return defaultValue;
-        }
+            return default;
 
-        try
-        {
-            // ۲. استفاده از TypeConverter برای انواع خاص (مانند Nullable)
-            var converter = TypeDescriptor.GetConverter(typeof(T));
-            if (converter != null && converter.CanConvertFrom(typeof(string)))
-            {
-                return (T)converter.ConvertFromString(value)!;
-            }
+        var targetType = typeof(T);
+        var underlyingType = Nullable.GetUnderlyingType(targetType) ?? targetType;
 
-            // ۳. استفاده از Convert.ChangeType برای انواع پایه (int, bool, etc.)
-            // اگر T یک نوع Nullable نیست، از Convert.ChangeType استفاده می‌کنیم.
-            return (T)Convert.ChangeType(value, typeof(T));
-        }
-        catch (Exception)
-        {
-            // در صورت بروز هر گونه خطا در تبدیل (مثلاً رشته "abc" به int)
-            return defaultValue;
-        }
+        // برای انواع ساده
+        if (underlyingType == typeof(string))
+            return (T)(object)value;
+
+        if (underlyingType == typeof(int))
+            return (T)(object)int.Parse(value);
+
+        if (underlyingType == typeof(long))
+            return (T)(object)long.Parse(value);
+
+        if (underlyingType == typeof(decimal))
+            return (T)(object)decimal.Parse(value);
+
+        if (underlyingType == typeof(double))
+            return (T)(object)double.Parse(value);
+
+        if (underlyingType == typeof(bool))
+            return (T)(object)bool.Parse(value);
+
+        if (underlyingType == typeof(DateTime))
+            return (T)(object)DateTime.Parse(value);
+
+        if (underlyingType == typeof(Guid))
+            return (T)(object)Guid.Parse(value);
+
+        // برای انواع پیچیده (JSON)
+        return JsonSerializer.Deserialize<T>(value);
     }
 
     /// <summary>
     /// تبدیل رشته به نوع بولی (bool) با مدیریت مقادیر رایج True/False.
     /// </summary>
-    public static bool ConvertToBool(this string? value, bool defaultValue = false)
+    public static bool ConvertToBool(this string value, bool defaultValue = false)
     {
         if (bool.TryParse(value, out bool result))
         {

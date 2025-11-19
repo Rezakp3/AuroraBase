@@ -1,19 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
-		<TargetFramework>net8.0</TargetFramework>
+		<TargetFramework>net10.0</TargetFramework>
 		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
+		<Nullable>disable</Nullable>
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="DNTPersianUtils.Core" Version="6.7.0" />
-		<PackageReference Include="System.Drawing.Common" Version="9.0.10" />
+		<PackageReference Include="DNTPersianUtils.Core" Version="6.7.1" />
+		<PackageReference Include="Mapster" Version="7.4.0" />
+		<PackageReference Include="Microsoft.Extensions.Logging" Version="10.0.0" />
 
 		<!-- ✅ اضافه شوند برای Attributes -->
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.3.0" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.3.0" />
-		<PackageReference Include="SixLabors.ImageSharp" Version="3.1.12" />
-		<PackageReference Include="SixLabors.ImageSharp.Drawing" Version="2.1.7" />
 	</ItemGroup>
 </Project>
