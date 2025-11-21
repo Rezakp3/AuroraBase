@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces.Repositories;
+using Application.Resources;
 
 namespace Application.Common.Interfaces.Generals;
 
@@ -12,9 +13,11 @@ public interface IUnitOfWork : IDisposable
     IRoleRepository Roles { get; }
     IMenuRepository Menus { get; }
     IServiceRepository Services { get; }
-    ISessionRepository RefreshTokens { get; }
+    ISessionRepository Sessions { get; }
     ISettingRepository Settings { get; }
-    
+    IUserRoleRepository UserRoles { get; }
+    IRoleServiceRepository RoleServices { get; }
+
     // Transaction Management
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     int SaveChanges();
@@ -23,3 +26,4 @@ public interface IUnitOfWork : IDisposable
     Task CommitTransactionAsync(CancellationToken cancellationToken = default);
     Task RollbackTransactionAsync(CancellationToken cancellationToken = default);
 }
+

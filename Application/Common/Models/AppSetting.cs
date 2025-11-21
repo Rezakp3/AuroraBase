@@ -1,4 +1,5 @@
-using System.ComponentModel;
+using Aurora.Jwt.Models;
+using Aurora.Logger.Models;
 
 namespace Application.Common.Models;
 
@@ -8,6 +9,8 @@ public class AppSetting
     public int UserRoleId { get; set; }
     public int AdminRoleId { get; set; }
     public ConnectionStrings ConnectionStrings { get; set; } = new();
+    public JwtSettings JwtSettings { get; set; }
+    public AuroraLogSettings AuroraLog { get; set; }
 }
 
 

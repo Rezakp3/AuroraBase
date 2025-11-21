@@ -17,7 +17,7 @@ public interface ICaptchaService
     /// <returns>نتیجه تولید کپچا</returns>
     Task<CaptchaResult> GenerateAsync(
         int length = 5, 
-        int expirationMinutes = 5, 
+        int expirationMinutes = 2, 
         int maxAttempts = 3,
         CancellationToken cancellationToken = default);
 

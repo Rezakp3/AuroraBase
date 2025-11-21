@@ -11,7 +11,7 @@ public class ApiResult(int code = 200, bool isSuccess = true)
         {
             if (!string.IsNullOrEmpty(_message))
                 return _message;
-            
+
             // استفاده از Resource اگر موجود باشد
             return ResourceConfig.ResourcesFa?.GetString(Code.ToString());
         }
@@ -24,7 +24,7 @@ public class ApiResult(int code = 200, bool isSuccess = true)
     public static ApiResult Success(string? message = null)
         => new(200, true) { Message = message };
 
-    public static ApiResult Fail(int code = 400, string? message = null)
+    public static ApiResult Fail(string? message = null, int code = 400)
         => new(code, false) { Message = message };
 
     public static ApiResult NotFound(string? fieldName = null)
@@ -38,7 +38,7 @@ public class ApiResult<T>(int code = 200, bool isSuccess = true) : ApiResult(cod
     public static ApiResult<T> Success(T? data = default, string? message = null)
         => new(200, true) { Data = data, Message = message };
 
-    new public static ApiResult<T> Fail(int code = 400, string? message = null)
+    new public static ApiResult<T> Fail(string? message = null, int code = 400)
         => new(code, false) { Message = message };
 
     new public static ApiResult<T> NotFound(string? fieldName = null)

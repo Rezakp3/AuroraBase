@@ -1,4 +1,6 @@
-﻿using Application.Common.Models;
+﻿using Application.Common.Interfaces.Services;
+using Application.Common.Models;
+using Application.Services;
 using Microsoft.Extensions.DependencyInjection;
 using System.Globalization;
 using System.Reflection;
@@ -11,12 +13,16 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         var assembly = Assembly.GetExecutingAssembly();
-        
+
         // MediatR Registration
         services.AddMediatR(config =>
         {
             config.RegisterServicesFromAssembly(assembly);
         });
+
+        services.AddScoped<IPermissionService, PermissionService>();
+        services.AddScoped<IDeviceService, DeviceService>();
+        services.AddScoped<IAuthService, AuthService>();
 
         // Resource Configuration
         InitializeResources();

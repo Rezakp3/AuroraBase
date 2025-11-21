@@ -1,16 +1,36 @@
-﻿using Api.Extentions;
+﻿using Api.Attributes;
+using Api.Extentions;
 using Application;
-using Aurora.Jwt.Models;
+using Application.Common.Models;
+using Aurora.Cache;
+using Aurora.Captcha;
+using Aurora.Jwt;
+using Aurora.Logger;
 using Infrastructure;
+using Infrastructure.Security.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Serilog;
+using System.Text;
 
+Log.Logger = new LoggerConfiguration()
+    .WriteTo.Console()
+    .CreateLogger();
 var builder = WebApplication.CreateBuilder(args);
-
+builder.Host.UseSerilog();
 // Configuration
 var services = builder.Services;
-services.Configure<JwtSettings>(builder.Configuration.GetSection("JwtSettings"));
+var appsetting = builder.Configuration.Get<AppSetting>() ?? new();
+services.AddSingleton(appsetting)
+    .AddSingleton(appsetting.JwtSettings)
+    .AddSingleton(appsetting.AuroraLog);
 
+services.AddCache();
+services.AddLogger(); 
+services.AddCaptcha();
+services.AddJwt();
 
 // Add Layers
 services.AddApplication();
@@ -19,7 +39,7 @@ services.AddInfrastructure(builder.Configuration);
 services.AddHttpContextAccessor();
 
 // Controllers & Validation
-services.AddControllers(opts => 
+services.AddControllers(opts =>
     opts.Filters.Add<ValidateModelStateAttribute>());
 
 // Swagger
@@ -46,9 +66,31 @@ services.AddSwaggerGen(c =>
     {
         { jwtSecurityScheme, Array.Empty<string>() }
     });
-    
+
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuroraBase API", Version = "v1.0" });
 });
+
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = false,
+            ValidateIssuer = false,
+
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appsetting.JwtSettings.SecretKey)),
+
+            ValidateLifetime = true,
+            ClockSkew = TimeSpan.Zero
+        };
+    });
+
+// 2. ثبت Policy
+services.AddAuthorizationBuilder()
+                    .AddPolicy(AutoPermissionAttribute.PolicyName, static policy =>
+                    { policy.Requirements.Add(new DynamicPermissionRequirement()); });
+
 
 var app = builder.Build();
 
@@ -68,6 +110,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseJwtBlocklist();
 app.MapControllers();
 
 app.Run();

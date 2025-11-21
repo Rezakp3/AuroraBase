@@ -12,7 +12,7 @@ public class SessionRepository(MyContext context) : Repository<Session, Guid>(co
         var session =  await dbSet
             .FirstOrDefaultAsync(rt => rt.RefreshToken == token, ct); 
         
-        return null;
+        return session;
     }
 
     public async Task<List<Session>> GetActiveTokensByUserIdAsync(long userId, CancellationToken ct = default)

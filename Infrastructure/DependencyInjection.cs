@@ -6,6 +6,8 @@ using Infrastructure.Persistence.Repositories;
 using Infrastructure.Persistence.Repositories.Base;
 using Infrastructure.Persistence.Repositories.Cached;
 using Infrastructure.Persistence.Seeders;
+using Infrastructure.Security.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,6 +50,8 @@ public static class DependencyInjection
 
         services.AddScoped<IRoleServiceRepository, RoleServiceRepository>();
         services.Decorate<IRoleServiceRepository, CachedRoleServiceRepository>();
+        services.AddScoped<IAuthorizationHandler, DynamicPermissionHandler>();
+
         return services;
     }
 

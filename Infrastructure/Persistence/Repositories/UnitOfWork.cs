@@ -13,8 +13,11 @@ public class UnitOfWork(MyContext context, IServiceProvider serviceProvider) : I
     public IRoleRepository Roles => GetService<IRoleRepository>();
     public IMenuRepository Menus => GetService<IMenuRepository>();
     public IServiceRepository Services => GetService<IServiceRepository>();
-    public ISessionRepository RefreshTokens => GetService<ISessionRepository>();
+    public ISessionRepository Sessions => GetService<ISessionRepository>();
     public ISettingRepository Settings => GetService<ISettingRepository>();
+    public IUserRoleRepository UserRoles => GetService<IUserRoleRepository>();
+    public IRoleServiceRepository RoleServices => GetService<IRoleServiceRepository>();
+
 
     #region navigations
     public int SaveChanges()

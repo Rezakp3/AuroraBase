@@ -3,15 +3,15 @@ using Microsoft.Extensions.Logging;
 using Serilog.Context;
 using System.Runtime.CompilerServices;
 using Aurora.Logger.Helpers;
+using Microsoft.Extensions.Options;
 
 namespace Aurora.Logger.Services;
 
 
 public class AuroraLogger(
-    ILogger logger,
-    AuroraLogOptions options) : IAuroraLogger
+    ILogger<AuroraLogger> logger,
+    AuroraLogSettings options) : IAuroraLogger
 {
-
     // متد کمکی برای اجرای منطق اصلی لاگ (فقط یک بار نوشته می‌شود)
     private void LogInternal(
         LogLevel level,

@@ -9,7 +9,9 @@ public class UserRoleConfig : IEntityTypeConfiguration<UserRole>
     public void Configure(EntityTypeBuilder<UserRole> builder)
     {
         builder.ToTable("UserRole", "Auth");
-        builder.HasKey(x => new { x.UserId, x.RoleId });
+        builder.HasKey(x => x.Id);
+
+        builder.HasIndex(x => new { x.RoleId, x.UserId }).IsUnique();
 
         builder.HasOne(x => x.User)
             .WithMany(x => x.UserRoles)

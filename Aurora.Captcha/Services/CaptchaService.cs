@@ -9,7 +9,7 @@ namespace Aurora.Captcha.Services;
 /// <summary>
 /// سرویس مدیریت کپچا با استفاده از Cache
 /// </summary>
-public class CaptchaService(ICacheService cacheService, IAuroraLogger logger) : ICaptchaService
+public class CaptchaService(ICacheService cacheService) : ICaptchaService
 {
 
     /// <summary>
@@ -44,8 +44,8 @@ public class CaptchaService(ICacheService cacheService, IAuroraLogger logger) : 
 
             await cacheService.SetAsync(cacheKey, captchaData, expiration, cancellationToken);
 
-            logger.LogInfo($"Captcha generated: {captchaId}, Expires in {expirationMinutes} minutes",
-                new { captchaId, expirationMinutes });
+            //logger.LogInfo($"Captcha generated: {captchaId}, Expires in {expirationMinutes} minutes",
+                //new { captchaId, expirationMinutes });
 
             return new CaptchaResult
             {
@@ -56,7 +56,7 @@ public class CaptchaService(ICacheService cacheService, IAuroraLogger logger) : 
         }
         catch (Exception ex)
         {
-            logger.LogError("Error generating captcha", ex);
+            //logger.LogError("Error generating captcha", ex);
             throw;
         }
     }
@@ -86,21 +86,21 @@ public class CaptchaService(ICacheService cacheService, IAuroraLogger logger) : 
             // بررسی وجود
             if (captchaData == null)
             {
-                logger.LogWarning("Captcha not found or expired: {CaptchaId}", captchaId);
+                //logger.LogWarning("Captcha not found or expired: {CaptchaId}", captchaId);
                 return CaptchaValidationResult.Failure("کپچا منقضی شده یا نامعتبر است");
             }
 
             // بررسی استفاده قبلی
             if (captchaData.IsUsed)
             {
-                logger.LogWarning("Captcha already used: {CaptchaId}", captchaId);
+                //logger.LogWarning("Captcha already used: {CaptchaId}", captchaId);
                 return CaptchaValidationResult.Failure("این کپچا قبلاً استفاده شده است");
             }
 
             // بررسی تعداد تلاش‌ها
             if (captchaData.RemainingAttempts <= 0)
             {
-                logger.LogWarning("Captcha max attempts reached: {CaptchaId}", captchaId);
+                //logger.LogWarning("Captcha max attempts reached: {CaptchaId}", captchaId);
                 await RemoveAsync(captchaId, cancellationToken);
                 return CaptchaValidationResult.Failure("تعداد تلاش‌های مجاز تمام شده است", 0);
             }
@@ -114,7 +114,7 @@ public class CaptchaService(ICacheService cacheService, IAuroraLogger logger) : 
                 captchaData.IsUsed = true;
                 await cacheService.SetAsync(cacheKey, captchaData, TimeSpan.FromMinutes(1), cancellationToken);
 
-                logger.LogInfo("Captcha validated successfully: {CaptchaId}", captchaId);
+                //logger.LogInfo("Captcha validated successfully: {CaptchaId}", captchaId);
                 return CaptchaValidationResult.Success();
             }
             else
@@ -123,7 +123,7 @@ public class CaptchaService(ICacheService cacheService, IAuroraLogger logger) : 
                 captchaData.RemainingAttempts--;
                 await cacheService.SetAsync(cacheKey, captchaData, TimeSpan.FromMinutes(5), cancellationToken);
 
-                logger.LogWarning($"Invalid captcha attempt: {captchaId}, Remaining: {captchaData.RemainingAttempts}");
+                //logger.LogWarning($"Invalid captcha attempt: {captchaId}, Remaining: {captchaData.RemainingAttempts}");
 
                 return CaptchaValidationResult.Failure(
                     "کد کپچا اشتباه است",
@@ -132,7 +132,7 @@ public class CaptchaService(ICacheService cacheService, IAuroraLogger logger) : 
         }
         catch (Exception ex)
         {
-            logger.LogError("Error validating captcha: {CaptchaId}", captchaId, ex);
+            //logger.LogError("Error validating captcha: {CaptchaId}", captchaId, ex);
             throw;
         }
     }
@@ -147,11 +147,11 @@ public class CaptchaService(ICacheService cacheService, IAuroraLogger logger) : 
             var cacheKey = CacheKeyBuilder.ForCaptcha(captchaId);
             await cacheService.RemoveAsync(cacheKey, cancellationToken);
 
-            logger.LogInfo("Captcha removed: {CaptchaId}", captchaId);
+            //logger.LogInfo("Captcha removed: {CaptchaId}", captchaId);
         }
         catch (Exception ex)
         {
-            logger.LogError("Error removing captcha: {CaptchaId}", captchaId, ex);
+            //logger.LogError("Error removing captcha: {CaptchaId}", captchaId, ex);
             throw;
         }
     }
@@ -189,7 +189,7 @@ public class CaptchaService(ICacheService cacheService, IAuroraLogger logger) : 
 
             await cacheService.SetAsync(cacheKey, captchaData, expiration, cancellationToken);
 
-            logger.LogInfo("Captcha regenerated: {CaptchaId}", captchaId);
+            //logger.LogInfo("Captcha regenerated: {CaptchaId}", captchaId);
 
             return new CaptchaResult
             {
@@ -200,7 +200,7 @@ public class CaptchaService(ICacheService cacheService, IAuroraLogger logger) : 
         }
         catch (Exception ex)
         {
-            logger.LogError("Error regenerating captcha: {CaptchaId}", captchaId, ex);
+            //logger.LogError("Error regenerating captcha: {CaptchaId}", captchaId, ex);
             throw;
         }
     }

@@ -1,11 +1,7 @@
-﻿using System.Data.SqlTypes;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System;
+using System.Data.SqlTypes;
 using System.Security.Claims;
-using System.Security.Cryptography;
-using System.Text;
-using Aurora.Jwt.Models;
 using Microsoft.AspNetCore.Http;
-using Microsoft.IdentityModel.Tokens;
 using Utils.Helpers;
 
 namespace Aurora.Jwt.Helpers;
@@ -17,7 +13,7 @@ public static class JwtTokenHelper
 {
     extension(IHttpContextAccessor accessor)
     {
-        public T? GetUserId<T>()
+        public T GetUserId<T>()
         {
             var claim = accessor.GetClaims()
                 .FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier);
@@ -43,5 +39,21 @@ public static class JwtTokenHelper
 
         public IEnumerable<Claim> GetClaims()
             => accessor.HttpContext.User.Claims;
+
+        public string GetClaim(string Key)
+        {
+            var claim = accessor.GetClaims()
+                .FirstOrDefault(c => c.Type == Key);
+            
+            return claim?.Value;
+        }
+
+        public string GetAccessToken()
+        {
+            var header = accessor.HttpContext?.Request.Headers.FirstOrDefault(x=>x.Key=="Authorization").Value.ToString();
+            if (string.IsNullOrEmpty(header) || !header.StartsWith("Bearer ", StringComparison.OrdinalIgnoreCase))
+                return string.Empty;
+            return header["Bearer ".Length..].Trim();
+        }
     }
 }

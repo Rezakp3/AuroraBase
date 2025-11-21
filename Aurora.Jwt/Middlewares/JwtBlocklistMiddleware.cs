@@ -1,5 +1,7 @@
 ﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using Aurora.Jwt;
+using Aurora.Jwt.Helpers;
 using Aurora.Jwt.Services.Token;
 using Microsoft.AspNetCore.Http;
 

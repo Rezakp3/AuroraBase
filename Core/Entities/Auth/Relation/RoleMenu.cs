@@ -1,6 +1,6 @@
 ﻿namespace Core.Entities.Auth.Relation;
 
-public class RoleMenu
+public class RoleMenu : BaseEntity<int>
 {
     public int RoleId { get; set; } 
     public int MenuId { get; set; }

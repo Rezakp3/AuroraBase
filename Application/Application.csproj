@@ -9,9 +9,12 @@
   <ItemGroup>
     <PackageReference Include="BCrypt.Net-Core" Version="1.6.0" />
     <PackageReference Include="MediatR" Version="13.1.0" />
+    <PackageReference Include="UAParser" Version="3.1.47" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Aurora.Captcha\Aurora.Captcha.csproj" />
+    <ProjectReference Include="..\Aurora.Jwt\Aurora.Jwt.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
   </ItemGroup>
 
@@ -34,7 +37,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\Auth\Login\" />
+    <Folder Include="Features\MenuFeature\Get\ById\" />
   </ItemGroup>
 
 </Project>

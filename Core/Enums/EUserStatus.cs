@@ -1,15 +1,19 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 
 namespace Core.Enums;
 
 public enum EUserStatus
 {
-    [Display(Name = "فعال")]
+    [Description("پیش فعال")]
+    PreActive = 0,
+
+    [Description("فعال")]
     Active = 1,
 
-    [Display(Name = "غیرفعال")]
-    InActive = 0,
+    [Description("غیرفعال")]
+    InActive = 2,
 
-    [Display(Name = "مسدود")]
-    Blocked = 2,
+    [Description("مسدود")]
+    Blocked = 3,
 }

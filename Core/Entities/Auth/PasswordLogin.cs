@@ -16,6 +16,6 @@ public class PasswordLogin : BaseEntityWithDate<int>
     public DateTime LastUpdateDate { get; set; }
 
 
-    public int UserId { get; set; }
+    public long UserId { get; set; }
     public User User { get; set; }
 }
