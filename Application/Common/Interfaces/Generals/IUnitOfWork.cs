@@ -17,10 +17,11 @@ public interface IUnitOfWork : IDisposable
     ISettingRepository Settings { get; }
     IUserRoleRepository UserRoles { get; }
     IRoleServiceRepository RoleServices { get; }
+    IPasswordLoginRepository PasswordLogin { get; }
 
     // Transaction Management
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
-    int SaveChanges();
+    Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default);
+    bool SaveChanges();
     
     Task BeginTransactionAsync(CancellationToken cancellationToken = default);
     Task CommitTransactionAsync(CancellationToken cancellationToken = default);

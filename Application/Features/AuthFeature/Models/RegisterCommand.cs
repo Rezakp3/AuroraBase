@@ -17,6 +17,5 @@ public class RegisterCommand
 
     [RequiredFa(ErrorMessage = "رمز عبور")]
     [StringLengthFa(maximumLength: 50)]
-    // می‌توانیم اینجا RangeFaAttribute را برای حداقل طول رمز عبور اضافه کنیم
     public string Password { get; set; } = null!;
 }

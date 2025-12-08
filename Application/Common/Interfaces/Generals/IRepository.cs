@@ -18,7 +18,7 @@ public interface IRepository<TEntity, TKey> where TEntity : class where TKey : s
     /// <param name="id">شناسه موجودیت</param>
     /// <param name="cancellationToken">توکن لغو عملیات</param>
     /// <returns>موجودیت یافت شده یا null</returns>
-    Task<TEntity?> GetByIdAsync(TKey id, CancellationToken cancellationToken = default);
+    Task<TEntity> GetByIdAsync(TKey id, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// دریافت اولین موجودیت که شرط را برآورده می‌کند
@@ -26,7 +26,7 @@ public interface IRepository<TEntity, TKey> where TEntity : class where TKey : s
     /// <param name="predicate">شرط جستجو</param>
     /// <param name="cancellationToken">توکن لغو عملیات</param>
     /// <returns>موجودیت یافت شده یا null</returns>
-    Task<TEntity?> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
+    Task<TEntity> FirstOrDefaultAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// دریافت تمام موجودیت‌ها

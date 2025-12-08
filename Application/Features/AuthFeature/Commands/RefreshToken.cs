@@ -21,7 +21,7 @@ public class RefreshTokenCommand : IRequest<ApiResult<TokenVm>>
     public string RefreshToken { get; set; } = null!;
 }
 
-public class RefreshTokenCommandHandler(
+internal class RefreshTokenCommandHandler(
     IUnitOfWork uow,
     ITokenManager tokenManager,
     IHttpContextAccessor accessor,
@@ -30,7 +30,7 @@ public class RefreshTokenCommandHandler(
 {
     public async Task<ApiResult<TokenVm>> Handle(RefreshTokenCommand request, CancellationToken cancellationToken)
     {
-        var jwtToken = accessor.GetUser<JwtVm>();
+        var jwtToken = accessor.GetToken<JwtVm>();
 
         if (jwtToken.Jti == null)
         {

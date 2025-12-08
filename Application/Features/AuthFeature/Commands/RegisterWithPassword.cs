@@ -13,7 +13,7 @@ using Utils.Helpers;
 namespace Application.Features.AuthFeature.Commands;
 
 public class RegisterWithPasswordCommand : RegisterCommand, IRequest<ApiResult<TokenVm>>;
-public class RegisterWithPasswordCommandHandler(
+internal class RegisterWithPasswordCommandHandler(
     IUnitOfWork uow,
     IAuthService authService, // تزریق سرویس جدید
     AppSetting appSettings)

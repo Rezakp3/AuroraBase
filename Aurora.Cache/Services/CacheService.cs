@@ -182,8 +182,8 @@ public class CacheService(
     public async Task<bool> ExistsAsync(string key, CancellationToken cancellationToken = default)
     {
         // راه حل موقت: تلاش برای دریافت. اگر null نبود یعنی هست.
-        var val = await GetAsync<object>(key, cancellationToken);
-        return val != null;
+        var val = await GetAsync<bool>(key, cancellationToken);
+        return val is true;
     }
 
     public async Task RefreshAsync(string key, CancellationToken cancellationToken = default)

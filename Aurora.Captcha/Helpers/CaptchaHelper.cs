@@ -190,7 +190,7 @@ public static class CaptchaHelper
             var textSize = TextMeasurer.MeasureSize(code, textOptions);
 
             // محاسبه موقعیت شروع (مرکز)
-            float startX = (width - textSize.Width) / 2;
+            float startX = (width - textSize.Width) / 3;
             float currentX = startX;
             float baseY = (height - textSize.Height) / 2;
 
@@ -215,7 +215,7 @@ public static class CaptchaHelper
                 ctx.DrawText(drawingOptions, charText, textColor);
 
                 // فاصله بین کاراکترها (با تغییرات تصادفی)
-                currentX += charSize.Width * Random.Next(75, 95) / 100f;
+                currentX += charSize.Width * Random.Next(100, 200) / 100f;
             }
         }
         catch (Exception)

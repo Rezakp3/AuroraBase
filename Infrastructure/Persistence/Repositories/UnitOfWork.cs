@@ -17,14 +17,21 @@ public class UnitOfWork(MyContext context, IServiceProvider serviceProvider) : I
     public ISettingRepository Settings => GetService<ISettingRepository>();
     public IUserRoleRepository UserRoles => GetService<IUserRoleRepository>();
     public IRoleServiceRepository RoleServices => GetService<IRoleServiceRepository>();
+    public IPasswordLoginRepository PasswordLogin => GetService<IPasswordLoginRepository>();
 
 
     #region navigations
-    public int SaveChanges()
-        => context.SaveChanges();
+    public bool SaveChanges()
+    {
+        var res = context.SaveChanges();
+        return !(res <= 0);
+    }
 
-    public async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
-        => await context.SaveChangesAsync(cancellationToken);
+    public async Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        var res = await context.SaveChangesAsync(cancellationToken);
+        return !(res <= 0);
+    }
 
     public async Task BeginTransactionAsync(CancellationToken cancellationToken = default)
         => _transaction = await context.Database.BeginTransactionAsync(cancellationToken);

@@ -36,4 +36,5 @@ public class UserRepository(MyContext context) : Repository<User, long>(context)
 
     public async Task<bool> UserNameOrEmailExistForUpdate(long id, string email, string username, CancellationToken ct = default)
         => await context.PasswordLogins.AnyAsync(x => x.Id != id && (x.UserName.Eq(username) || x.Email.Eq(email)), ct);
+
 }

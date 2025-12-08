@@ -6,9 +6,10 @@ public class AutoPermissionAttribute : AuthorizeAttribute
 {
     public const string PolicyName = "DynamicPermission";
 
-    public AutoPermissionAttribute()
+    public AutoPermissionAttribute(bool allRoles = false)
     {
         AuthenticationSchemes = "Bearer";
-        Policy = PolicyName;
+        if (!allRoles)
+            Policy = PolicyName;
     }
 }

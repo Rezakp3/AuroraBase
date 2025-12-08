@@ -17,7 +17,7 @@ public class LoginWithPasswordCommand : IRequest<ApiResult<TokenVm>>
     [RequiredFa(ErrorMessage = "رمز عبور")]
     public string Password { get; set; } = null!;
 }
-public class LoginWithPasswordCommandHandler(
+internal class LoginWithPasswordCommandHandler(
     IUnitOfWork uow,
     IAuthService authService) // تزریق سرویس مشترک
     : IRequestHandler<LoginWithPasswordCommand, ApiResult<TokenVm>>

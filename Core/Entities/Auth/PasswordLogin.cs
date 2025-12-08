@@ -13,8 +13,9 @@ public class PasswordLogin : BaseEntityWithDate<int>
 
     public string UserName { get; set; }
     public string PasswordHash { get; set; }
-    public DateTime LastUpdateDate { get; set; }
-
+    public DateTime? LastUpdateDate { get; set; }
+    public string ResetPasswordToken { get; set; }
+    public DateTime? ResetPasswordTokenExpireDate { get; set; }
 
     public long UserId { get; set; }
     public User User { get; set; }

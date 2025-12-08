@@ -41,6 +41,7 @@ public static class DependencyInjection
         services.AddScoped<IMenuRepository, MenuRepository>();
         services.AddScoped<IServiceRepository, ServiceRepository>();
         services.AddScoped<ISessionRepository, SessionRepository>();
+        services.AddScoped<IPasswordLoginRepository, PasswordLoginRepository>();
 
         services.AddScoped<ISettingRepository, SettingRepository>();
         services.Decorate<ISettingRepository, CachedSettingRepository>();

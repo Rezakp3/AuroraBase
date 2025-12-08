@@ -19,7 +19,7 @@ public class LogoutCommand : IRequest<ApiResult>
     public string RefreshToken { get; set; } = null!;
 }
 
-public class LogoutCommandHandler(
+internal class LogoutCommandHandler(
     IUnitOfWork uow,
     IJwtService jwtService,
     ITokenManager tokenManager,

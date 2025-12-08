@@ -3,11 +3,11 @@ using Aurora.Captcha.Models;
 using Aurora.Captcha.Services;
 using MediatR;
 
-namespace Application.Features.Auth.Commands.Captcha;
+namespace Application.Features.AuthFeature.Queries;
 
 public class GetCaptchaQuery : IRequest<ApiResult<CaptchaResult>>;
 
-public class GetCaptchaQueryHandler(ICaptchaService captcha) : IRequestHandler<GetCaptchaQuery, ApiResult<CaptchaResult>>
+internal class GetCaptchaQueryHandler(ICaptchaService captcha) : IRequestHandler<GetCaptchaQuery, ApiResult<CaptchaResult>>
 {
     public async Task<ApiResult<CaptchaResult>> Handle(GetCaptchaQuery request, CancellationToken cancellationToken)
     {

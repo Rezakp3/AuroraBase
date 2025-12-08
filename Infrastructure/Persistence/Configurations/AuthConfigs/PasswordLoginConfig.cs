@@ -12,9 +12,10 @@ public class PasswordLoginConfig : IEntityTypeConfiguration<PasswordLogin>
         builder.HasKey(x => x.UserId);
         builder.Property(x => x.Email).HasMaxLength(30).IsRequired();
         builder.Property(x => x.EmailIsVerified).HasDefaultValue(false).ValueGeneratedOnAdd();
-        builder.Property(x => x.EmailVerificationCode).HasMaxLength(30).IsRequired(false);
+        builder.Property(x => x.EmailVerificationCode).HasMaxLength(50).IsRequired(false);
         builder.Property(x => x.VerifyCodeExpireDate).IsRequired(false);
         builder.Property(x => x.UserName).HasMaxLength(20).IsRequired();
+        builder.Property(x => x.ResetPasswordToken).IsRequired(false);
         
         builder.HasOne(x => x.User)
             .WithOne(y => y.PasswordLogin)

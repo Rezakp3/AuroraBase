@@ -31,6 +31,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aurora.Cache", "Aurora.Cach
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Aurora.Logger", "Aurora.Logger\Aurora.Logger.csproj", "{99866F36-B4CA-4562-B33F-FD6172AA73C9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EmailSender", "EmailSender\EmailSender.csproj", "{CF849CCF-F1EE-4417-A565-D7DDBB57FC97}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{99866F36-B4CA-4562-B33F-FD6172AA73C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99866F36-B4CA-4562-B33F-FD6172AA73C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99866F36-B4CA-4562-B33F-FD6172AA73C9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF849CCF-F1EE-4417-A565-D7DDBB57FC97}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF849CCF-F1EE-4417-A565-D7DDBB57FC97}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF849CCF-F1EE-4417-A565-D7DDBB57FC97}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF849CCF-F1EE-4417-A565-D7DDBB57FC97}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -86,6 +92,7 @@ Global
 		{E95D9EA2-F69D-4023-B9FB-F2177ECE0DBD} = {B66FB4D4-7EEA-463E-82F4-E3AAED1117B2}
 		{6C88FFFE-03E2-495A-887E-1C1BA33FD8D6} = {B66FB4D4-7EEA-463E-82F4-E3AAED1117B2}
 		{99866F36-B4CA-4562-B33F-FD6172AA73C9} = {B66FB4D4-7EEA-463E-82F4-E3AAED1117B2}
+		{CF849CCF-F1EE-4417-A565-D7DDBB57FC97} = {B66FB4D4-7EEA-463E-82F4-E3AAED1117B2}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {147E4D69-2827-4BC8-B97A-A4FF6621E862}

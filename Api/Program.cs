@@ -6,6 +6,7 @@ using Aurora.Cache;
 using Aurora.Captcha;
 using Aurora.Jwt;
 using Aurora.Logger;
+using EmailSender;
 using Infrastructure;
 using Infrastructure.Security.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -25,18 +26,30 @@ var services = builder.Services;
 var appsetting = builder.Configuration.Get<AppSetting>() ?? new();
 services.AddSingleton(appsetting)
     .AddSingleton(appsetting.JwtSettings)
-    .AddSingleton(appsetting.AuroraLog);
+    .AddSingleton(appsetting.AuroraLog)
+    .AddSingleton(appsetting.EmailSettings);
 
 services.AddCache();
-services.AddLogger(); 
+services.AddLogger();
 services.AddCaptcha();
 services.AddJwt();
-
+services.AddEmailSender();
 // Add Layers
 services.AddApplication();
 services.AddInfrastructure(builder.Configuration);
 
 services.AddHttpContextAccessor();
+
+// CORS - Development: Allow Everything
+services.AddCors(options =>
+{
+    options.AddPolicy("DevCorsPolicy", policy =>
+    {
+        policy.AllowAnyOrigin() 
+              .AllowAnyMethod()
+              .AllowAnyHeader();
+    });
+});
 
 // Controllers & Validation
 services.AddControllers(opts =>
@@ -60,7 +73,7 @@ services.AddSwaggerGen(c =>
             Type = ReferenceType.SecurityScheme
         }
     };
-    
+
     c.AddSecurityDefinition(jwtSecurityScheme.Reference.Id, jwtSecurityScheme);
     c.AddSecurityRequirement(new OpenApiSecurityRequirement
     {
@@ -100,14 +113,14 @@ if (app.Environment.IsDevelopment())
     await app.Services.SeedDatabaseAsync();
 }
 
-// Middleware Pipeline
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
+
+// CORS - باید قبل از Authentication باشد
+app.UseCors("DevCorsPolicy");
+
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseJwtBlocklist();

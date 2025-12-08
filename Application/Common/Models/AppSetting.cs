@@ -1,5 +1,6 @@
 using Aurora.Jwt.Models;
 using Aurora.Logger.Models;
+using EmailSender.ViewModel;
 
 namespace Application.Common.Models;
 
@@ -11,6 +12,7 @@ public class AppSetting
     public ConnectionStrings ConnectionStrings { get; set; } = new();
     public JwtSettings JwtSettings { get; set; }
     public AuroraLogSettings AuroraLog { get; set; }
+    public EmailSettings EmailSettings { get; set; }
 }
 
 
