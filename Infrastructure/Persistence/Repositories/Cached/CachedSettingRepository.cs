@@ -50,10 +50,8 @@ public class CachedSettingRepository(
         );
     }
 
-    public async Task<Setting> GetByKeyAsync(string key, string group, CancellationToken cancellationToken = default)
+    public async Task<Setting> GetByKeyAsync(string key, string group = "General", CancellationToken cancellationToken = default)
     {
-        // بهینه‌سازی: به جای کش کردن تکی هر کلید، کل گروه را می‌گیریم
-        // این کار تعداد درخواست‌های دیتابیس/کش را کاهش می‌دهد
         var groupSettings = await GetByGroupAsync(group, cancellationToken);
         return groupSettings.FirstOrDefault(s => s.Key == key);
     }

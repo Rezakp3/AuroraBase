@@ -17,7 +17,6 @@ public interface IUnitOfWork : IDisposable
     ISettingRepository Settings { get; }
     IUserRoleRepository UserRoles { get; }
     IRoleServiceRepository RoleServices { get; }
-    IPasswordLoginRepository PasswordLogin { get; }
 
     // Transaction Management
     Task<bool> SaveChangesAsync(CancellationToken cancellationToken = default);

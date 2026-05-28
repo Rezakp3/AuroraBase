@@ -9,6 +9,9 @@ public class ServiceConfig : IEntityTypeConfiguration<Service>
     public void Configure(EntityTypeBuilder<Service> builder)
     {
         builder.ToTable("Service", "Auth");
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).UseIdentityColumn().ValueGeneratedOnAdd();
+
         builder.Property(x => x.ServiceName).HasMaxLength(30).IsRequired();
         builder.Property(x => x.Description).HasMaxLength(250).IsRequired(false);
         builder.Property(x => x.Address).HasMaxLength(60).IsRequired();

@@ -18,7 +18,6 @@ public class MyContext : DbContext
     #region Auth
 
     public DbSet<User> Users => Set<User>();
-    public DbSet<PasswordLogin> PasswordLogins => Set<PasswordLogin>();
     public DbSet<Session> Sessions => Set<Session>();
     public DbSet<Role> Roles => Set<Role>();
     public DbSet<RoleClaim> RoleClaims => Set<RoleClaim>();
@@ -69,29 +68,7 @@ public class MyContext : DbContext
     #region OnModelCreating
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        #region base type configs
-
-        var baseEntityType = typeof(IBaseEntity<>);
-
-        var entityTypes = Assembly.GetAssembly(typeof(User))?
-            .GetTypes()
-            .Where(t => t.IsClass && !t.IsAbstract && t.BaseType != null && t.BaseType.IsGenericType &&
-                        t.BaseType.GetGenericTypeDefinition() == baseEntityType);
-
-        if (entityTypes is not null)
-            foreach (var type in entityTypes)
-            {
-                // تعریف کلید اصلی برای فیلد Id
-                modelBuilder.Entity(type).HasKey("Id");
-                modelBuilder.Entity(type)
-                    .Property("Id")
-                    .ValueGeneratedOnAdd()
-                    .UseIdentityColumn();
-            }
-
-        #endregion
-
+    { 
         var currentAssembly = Assembly.GetExecutingAssembly();
         modelBuilder.ApplyConfigurationsFromAssembly(currentAssembly);
 

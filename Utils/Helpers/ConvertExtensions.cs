@@ -55,8 +55,8 @@ public static class ConvertExtensions
             return result;
         }
         // تبدیل مقادیر "1" و "0"
-        if (value == "1") return true;
-        if (value == "0") return false;
+        if (value.Eq("1") || value.Eq("true")) return true;
+        if (value.Eq("0") || value.Eq("false")) return false;
 
         return defaultValue;
     }

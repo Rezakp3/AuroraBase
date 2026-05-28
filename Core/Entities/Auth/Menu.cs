@@ -15,7 +15,7 @@ public class Menu : BaseEntity<int>
 
     #region relation
 
-    public Menu? Parent { get; set; }
+    public Menu Parent { get; set; }
     public ICollection<Menu> SubMenu { get; set; } = [];
     public ICollection<RoleMenu> RoleMenus { get; set; } = [];
     public ICollection<MenuService> MenuServices { get; set; } = [];

@@ -3,8 +3,7 @@ using Application.Common.Interfaces.Services;
 
 namespace Application.Services;
 
-public class PermissionService(IUnitOfWork uow
-    ) : IPermissionService
+public class PermissionService(IUnitOfWork uow) : IPermissionService
 {
     private const string SecurityGroup = "Security";
     private const string SuperAdminsKey = "SuperAdminIds";

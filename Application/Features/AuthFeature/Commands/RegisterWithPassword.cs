@@ -1,29 +1,25 @@
-﻿// Application/Features/Auth/Commands/Register/RegisterCommandHandler.cs
-
-using Application.Common.Interfaces.Generals;
+﻿using Application.Common.Interfaces.Generals;
 using Application.Common.Interfaces.Services;
 using Application.Common.Models;
 using Application.Features.Auth.Models;
-using MediatR;
-using Microsoft.Extensions.Options;
 using Core.Entities.Auth;
 using Core.Enums;
 using Utils.Helpers;
+using Application.Features.AuthFeature.Models;
 
 namespace Application.Features.AuthFeature.Commands;
 
-public class RegisterWithPasswordCommand : RegisterCommand, IRequest<ApiResult<TokenVm>>;
+public class RegisterWithPasswordCommand : RegisterVm, IBaseRequest<TokenVm>;
 internal class RegisterWithPasswordCommandHandler(
     IUnitOfWork uow,
-    IAuthService authService, // تزریق سرویس جدید
-    AppSetting appSettings)
-    : IRequestHandler<RegisterWithPasswordCommand, ApiResult<TokenVm>>
+    IAuthService authService)
+    : IBaseHandler<RegisterWithPasswordCommand, TokenVm>
 {
 
     public async Task<ApiResult<TokenVm>> Handle(RegisterWithPasswordCommand request, CancellationToken cancellationToken)
     {
         // 1. بررسی تکراری بودن
-        var exists = await uow.Users.UserNameOrEmailExistForAdd(request.Email, request.Username, cancellationToken);
+        var exists = await uow.Users.UserNameExistForAdd(request.Username, cancellationToken);
         if (exists)
         {
             return ApiResult<TokenVm>.Fail(code: 1001);
@@ -43,19 +39,17 @@ internal class RegisterWithPasswordCommandHandler(
                 Status = EUserStatus.Active,
                 LastLoginDate = DateTime.UtcNow,
                 CreatedDate = DateTime.UtcNow,
-                PasswordLogin = new PasswordLogin
-                {
-                    UserName = request.Username,
-                    Email = request.Email,
-                    PasswordHash = hashedPassword,
-                    LastUpdateDate = DateTime.UtcNow,
-                }
+                UserName = request.Username,
+                PasswordHash = hashedPassword,
+                LastUpdateDate = DateTime.UtcNow,
             };
             await uow.Users.AddAsync(newUser, cancellationToken);
             await uow.SaveChangesAsync(cancellationToken);
 
+            var userRoleId = await uow.Settings.GetValueAsync<int>("UserRoleId", "Security", cancellationToken);
+
             // 5. انتساب نقش پیش‌فرض
-            await uow.UserRoles.AssignRoleToUserAsync(newUser.Id, appSettings.UserRoleId, cancellationToken);
+            await uow.UserRoles.AssignRoleToUserAsync(newUser.Id, userRoleId, cancellationToken);
 
             // 6. تولید توکن‌ها و نشست (استفاده از سرویس مشترک)
             var tokenResult = await authService.GenerateAuthTokensAndSessionAsync(newUser, cancellationToken);

@@ -18,7 +18,7 @@ public class TokenPayload
     /// <summary>
     /// ایمیل کاربر
     /// </summary>
-    public string Email { get; set; }
+    public string PhoneNumber { get; set; }
 
     public string Jti { get; set; }
 

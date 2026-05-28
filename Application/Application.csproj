@@ -16,7 +16,6 @@
     <ProjectReference Include="..\Aurora.Captcha\Aurora.Captcha.csproj" />
     <ProjectReference Include="..\Aurora.Jwt\Aurora.Jwt.csproj" />
     <ProjectReference Include="..\Core\Core.csproj" />
-    <ProjectReference Include="..\EmailSender\EmailSender.csproj" />
   </ItemGroup>
 
   <!-- ✅ اضافه کنید: EmbeddedResource برای فایل‌های .resx -->
@@ -38,7 +37,9 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\MenuFeature\Get\ById\" />
+    <Folder Include="Features\MenuFeature\Commands\" />
+    <Folder Include="Features\UsersFeature\Models\" />
+    <Folder Include="Features\UsersFeature\Queries\" />
   </ItemGroup>
 
 </Project>

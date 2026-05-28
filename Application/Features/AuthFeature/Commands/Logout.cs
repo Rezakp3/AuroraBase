@@ -2,9 +2,9 @@
 using Application.Common.Models;
 using Application.Features.Auth.Models;
 using Aurora.Jwt.Helpers;
+using Aurora.Jwt.Models;
 using Aurora.Jwt.Services.Jwt;
 using Aurora.Jwt.Services.Token;
-using MediatR;
 using Microsoft.AspNetCore.Http;
 using Utils.CustomAttributes;
 
@@ -13,7 +13,7 @@ namespace Application.Features.AuthFeature.Commands;
 /// <summary>
 /// مدل ورودی برای خروج کاربر
 /// </summary>
-public class LogoutCommand : IRequest<ApiResult>
+public class LogoutCommand : IBaseRequest
 {
     [RequiredFa(ErrorMessage = "Refresh Token")]
     public string RefreshToken { get; set; } = null!;
@@ -24,38 +24,27 @@ internal class LogoutCommandHandler(
     IJwtService jwtService,
     ITokenManager tokenManager,
     IHttpContextAccessor accessor)
-    : IRequestHandler<LogoutCommand, ApiResult>
+    : IBaseHandler<LogoutCommand>
 {
     public async Task<ApiResult> Handle(LogoutCommand request, CancellationToken cancellationToken)
     {
-        var accessToken = JwtTokenHelper.GetAccessToken(accessor);
-        if (string.IsNullOrEmpty(accessToken))
+        var jwtToken = accessor.GetToken<JwtVm>();
+
+        if (jwtToken.Jti == null)
         {
-            return ApiResult<TokenVm>.Fail(message: "Access Token در هدر یافت نشد.", code: 401);
-        }
-        // 1. استخراج JTI از Access Token
-        var principal = jwtService.GetPrincipalFromToken(accessToken);
-        if (principal == null)
-        {
-            return ApiResult<TokenVm>.Fail(message: "توکن دسترسی نامعتبر است.", code: 401);
+            return ApiResult<TokenVm>.Fail(message: "اطلاعات توکن ناقص است.", code: 401);
         }
 
-        var jtiClaim = principal?.FindFirst(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Jti);
-        var oldJti = jtiClaim?.Value;
+        var oldJti = jwtToken.Jti;
 
         // 2. ابطال Access Token (بلک‌لیست)
         if (oldJti != null)
         {
-            var expirationTimeClaim = principal?.FindFirst(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Exp);
-            if (expirationTimeClaim != null && long.TryParse(expirationTimeClaim.Value, out var expUnix))
-            {
-                var expTime = DateTimeOffset.FromUnixTimeSeconds(expUnix).UtcDateTime;
-                var remainingTime = expTime - DateTime.UtcNow;
+            var remainingTime = jwtToken.ExpirationDate - DateTime.UtcNow;
 
-                if (remainingTime > TimeSpan.Zero)
-                {
-                    await tokenManager.RevokeTokenAsync(oldJti, remainingTime, cancellationToken);
-                }
+            if (remainingTime > TimeSpan.Zero)
+            {
+                await tokenManager.RevokeTokenAsync(oldJti, remainingTime, cancellationToken);
             }
         }
 

@@ -1,21 +1,21 @@
-﻿using Application.Common.Models;
+﻿using Application.Common.Interfaces.Generals;
+using Application.Common.Models;
 using Application.Features.Auth.Models;
+using Application.Features.AuthFeature.Models;
 using Aurora.Captcha.Services;
 using Mapster;
 using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Application.Features.AuthFeature.Commands;
 
-public class RegisterWithPasswordCaptchaCommand : RegisterCommand, IRequest<ApiResult<TokenVm>>
+public class RegisterWithPasswordCaptchaCommand : RegisterVm, IBaseRequest<TokenVm>
 {
     public string CaptchaId { get; set; }
     public string Captcha { get; set; }
 }
 
-internal class RegisterWithPasswordCaptchaCommandHandler(ISender sender, ICaptchaService captchaService) : IRequestHandler<RegisterWithPasswordCaptchaCommand, ApiResult<TokenVm>>
+internal class RegisterWithPasswordCaptchaCommandHandler(ISender sender, ICaptchaService captchaService) 
+    : IBaseHandler<RegisterWithPasswordCaptchaCommand, TokenVm>
 {
     public async Task<ApiResult<TokenVm>> Handle(RegisterWithPasswordCaptchaCommand request, CancellationToken cancellationToken)
     {

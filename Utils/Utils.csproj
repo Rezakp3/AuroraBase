@@ -14,5 +14,6 @@
 
 		<!-- ✅ اضافه شوند برای Attributes -->
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.Abstractions" Version="2.3.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 	</ItemGroup>
 </Project>

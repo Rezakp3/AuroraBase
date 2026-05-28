@@ -11,15 +11,14 @@ namespace Application.Services;
 public class AuthService(
     IUnitOfWork uow,
     IJwtService jwtService,
-    IDeviceService deviceService,
-    JwtSettings jwt) : IAuthService
+    IDeviceService deviceService) : IAuthService
 {
 
     public async Task<TokenVm> GenerateAuthTokensAndSessionAsync(User user, CancellationToken ct)
     {
         // 1. دریافت اطلاعات دستگاه
         var clientInfo = deviceService.GetClientInfo();
-
+        var jwt = await uow.Settings.GetByGroupAsync<JwtSettings>("JwtSettings", ct);
         // 2. تولید JTI و Refresh Token
         var jti = Guid.NewGuid().ToString("N");
         var refreshToken = JwtService.GenerateRefreshToken();
@@ -46,8 +45,8 @@ public class AuthService(
         var payload = new TokenPayload
         {
             UserId = user.Id,
-            Username = user.PasswordLogin.UserName,
-            Email = user.PasswordLogin.Email,
+            Username = user.UserName,
+            PhoneNumber = user.PhoneNumber,
             Jti = jti,
             Roles = roleNames,
         };
@@ -68,6 +67,7 @@ public class AuthService(
 
     public async Task<TokenVm> RotateTokensAndSessionAsync(User user, Session oldSession, CancellationToken ct)
     {
+        var jwt = await uow.Settings.GetByGroupAsync<JwtSettings>("JwtSettings", ct);
         // 1. تولید JTI و Refresh Token جدید
         var newJti = Guid.NewGuid().ToString("N");
         var newRefreshToken = JwtService.GenerateRefreshToken();
@@ -98,8 +98,8 @@ public class AuthService(
         var payload = new TokenPayload
         {
             UserId = user.Id,
-            Username = user.PasswordLogin.UserName,
-            Email = user.PasswordLogin.Email,
+            Username = user.UserName,
+            PhoneNumber = user.PhoneNumber,
             Jti = newJti,
             Roles = roleNames,
         };

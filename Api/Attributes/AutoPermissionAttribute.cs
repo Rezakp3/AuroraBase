@@ -12,4 +12,8 @@ public class AutoPermissionAttribute : AuthorizeAttribute
         if (!allRoles)
             Policy = PolicyName;
     }
+    public override bool Match(object? obj)
+    {
+        return base.Match(obj);
+    }
 }

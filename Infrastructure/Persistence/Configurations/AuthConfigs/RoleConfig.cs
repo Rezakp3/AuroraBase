@@ -9,6 +9,9 @@ public class RoleConfig : IEntityTypeConfiguration<Role>
     public void Configure(EntityTypeBuilder<Role> builder)
     {
         builder.ToTable("Role", "Auth");
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).UseIdentityColumn().ValueGeneratedOnAdd();
+
         builder.Property(x => x.Name).HasMaxLength(20);
         builder.Property(x => x.Title).IsRequired(false).HasMaxLength(50);
 

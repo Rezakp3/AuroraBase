@@ -65,8 +65,6 @@ public static class ApiResultHelper
         public ApiResult Success()
             => apiResult.Success(200, null);
 
-
-
         public ApiResult Fail(int code = 400, string message = null)
         {
             apiResult.IsSuccess = false;
@@ -80,6 +78,9 @@ public static class ApiResultHelper
             => apiResult.Fail(400, message);
         public ApiResult Fail()
             => apiResult.Fail(400, null);
+
+        public ApiResult NotFound(string fieldName = null)
+            => apiResult.Fail(404, $"{fieldName} یافت نشد");
     }
 
     extension<T>(ApiResult<T> apiResult)
@@ -112,10 +113,13 @@ public static class ApiResultHelper
             => apiResult.Fail(400, message);
         public ApiResult<T> Fail()
             => apiResult.Fail(400, null);
+
+        public ApiResult<T> NotFound(string fieldName = null)
+            => apiResult.Fail(404, $"{fieldName} یافت نشد");
     }
 }
 public class ValidationError
 {
-    public string? PropertyName { get; set; }
-    public List<string>? Errors { get; set; }
+    public string PropertyName { get; set; }
+    public List<string> Errors { get; set; }
 }

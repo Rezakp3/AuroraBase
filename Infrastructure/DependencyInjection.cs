@@ -20,6 +20,7 @@ public static class DependencyInjection
         this IServiceCollection services,
         IConfiguration configuration)
     {
+        var aa = configuration.GetConnectionString("DefaultConnection");
         // DbContext با Interceptors
         services.AddDbContext<MyContext>(options =>
         {
@@ -41,7 +42,6 @@ public static class DependencyInjection
         services.AddScoped<IMenuRepository, MenuRepository>();
         services.AddScoped<IServiceRepository, ServiceRepository>();
         services.AddScoped<ISessionRepository, SessionRepository>();
-        services.AddScoped<IPasswordLoginRepository, PasswordLoginRepository>();
 
         services.AddScoped<ISettingRepository, SettingRepository>();
         services.Decorate<ISettingRepository, CachedSettingRepository>();

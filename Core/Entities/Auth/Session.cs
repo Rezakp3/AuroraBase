@@ -7,10 +7,10 @@ public class Session : BaseEntity<Guid>
     #region Properties
 
     public DateTime ExpireDate { get; set; }
-    public bool IsRevoked { get; set; }
-    public string? DeviceName { get; set; }
-    public string Jti { get; set; }
     public string RefreshToken { get; set; }
+    public bool IsRevoked { get; set; }
+    public string DeviceName { get; set; }
+    public string Jti { get; set; }
 
     // متد کمکی برای بررسی انقضا
     [NotMapped] 

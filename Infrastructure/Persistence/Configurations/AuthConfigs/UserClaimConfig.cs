@@ -13,6 +13,8 @@ namespace Infrastructure.Persistence.Configurations.AuthConfigs
         {
             builder.ToTable("UserClaim", "Auth");
             builder.HasKey(x => x.Id);
+            builder.Property(x => x.Id).UseIdentityColumn().ValueGeneratedOnAdd();
+
             builder.Property(x => x.ClaimType).HasMaxLength(30);
             builder.Property(x => x.ClaimValue).HasMaxLength(30);
 

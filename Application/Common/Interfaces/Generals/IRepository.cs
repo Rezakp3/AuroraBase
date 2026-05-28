@@ -10,6 +10,7 @@ namespace Application.Common.Interfaces.Generals;
 /// <typeparam name="TKey">نوع کلید اصلی</typeparam>
 public interface IRepository<TEntity, TKey> where TEntity : class where TKey : struct
 {
+
     #region Query Methods
 
     /// <summary>

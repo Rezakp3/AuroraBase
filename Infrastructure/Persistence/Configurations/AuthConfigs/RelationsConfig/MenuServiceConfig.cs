@@ -9,7 +9,10 @@ public class MenuServiceConfig : IEntityTypeConfiguration<MenuService>
     public void Configure(EntityTypeBuilder<MenuService> builder)
     {
         builder.ToTable("MenuService", "Auth");
-        builder.HasKey(x => new { x.MenuId, x.ServiceId });
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).UseIdentityColumn().ValueGeneratedOnAdd();
+        
+        builder.HasIndex(x => new { x.MenuId, x.ServiceId }).IsUnique();
 
         builder.HasOne(x => x.Menu)
             .WithMany(x => x.MenuServices)

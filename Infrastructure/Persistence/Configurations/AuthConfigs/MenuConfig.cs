@@ -9,6 +9,9 @@ internal class MenuConfig : IEntityTypeConfiguration<Menu>
     public void Configure(EntityTypeBuilder<Menu> builder)
     {
         builder.ToTable("Menu", "Auth");
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).UseIdentityColumn().ValueGeneratedOnAdd();
+
         builder.Property(x => x.Title).HasMaxLength(50);
 
         builder.HasMany(x => x.SubMenu)

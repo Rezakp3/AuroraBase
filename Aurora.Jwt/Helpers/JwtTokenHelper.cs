@@ -29,7 +29,7 @@ public static class JwtTokenHelper
         var claims = accessor.GetClaims();
         foreach (var prop in props)
         {
-            var val = claims.FirstOrDefault(c => c.Type == prop.Name)?.Value;
+            var val = claims.FirstOrDefault(c => c.Type.Eq(prop.Name))?.Value;
             if (val is not null)
                 prop.SetValue(instance, Convert.ChangeType(val, prop.PropertyType));
         }

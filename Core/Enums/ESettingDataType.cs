@@ -9,5 +9,5 @@ public enum ESettingDataType
     Email = 5,
     Url = 6,
     Json = 7,
-    Password = 8  // ???? ??????? ???? ?? IsEncrypted = true
+    Password = 8  
 }

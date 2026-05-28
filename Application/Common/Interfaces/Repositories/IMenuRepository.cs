@@ -6,4 +6,5 @@ namespace Application.Common.Interfaces.Repositories;
 public interface IMenuRepository : IRepository<Menu, int>
 {
     Task<IEnumerable<Menu>> GetByRoleId(int roleId,CancellationToken ct = default);
+    Task<IEnumerable<Menu>> GetByUserId(long userId, CancellationToken cancellationToken);
 }

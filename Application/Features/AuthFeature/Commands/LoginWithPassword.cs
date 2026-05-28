@@ -3,16 +3,15 @@ using Application.Common.Interfaces.Services;
 using Application.Common.Models;
 using Application.Features.Auth.Models;
 using Core.Enums;
-using MediatR;
 using Utils.CustomAttributes;
 using Utils.Helpers;
 
 namespace Application.Features.AuthFeature.Commands;
 
-public class LoginWithPasswordCommand : IRequest<ApiResult<TokenVm>>
+public class LoginWithPasswordCommand : IBaseRequest<TokenVm>
 {
     [RequiredFa(ErrorMessage = "نام کاربری یا ایمیل")]
-    public string UsernameOrEmail { get; set; } = null!;
+    public string UniqueId { get; set; } = null!;
 
     [RequiredFa(ErrorMessage = "رمز عبور")]
     public string Password { get; set; } = null!;
@@ -20,17 +19,17 @@ public class LoginWithPasswordCommand : IRequest<ApiResult<TokenVm>>
 internal class LoginWithPasswordCommandHandler(
     IUnitOfWork uow,
     IAuthService authService) // تزریق سرویس مشترک
-    : IRequestHandler<LoginWithPasswordCommand, ApiResult<TokenVm>>
+    : IBaseHandler<LoginWithPasswordCommand, TokenVm>
 {
     public async Task<ApiResult<TokenVm>> Handle(LoginWithPasswordCommand request, CancellationToken cancellationToken)
     {
         // 1. پیدا کردن کاربر و اعتبارسنجی رمز عبور
-        var user = await uow.Users.GetByEmailOrUsernameAsync(request.UsernameOrEmail, cancellationToken);
+        var user = await uow.Users.GetByPhoneNumberOrUsernameAsync(request.UniqueId, cancellationToken);
 
-        if (user?.PasswordLogin == null ||
-            !PasswordHasher.VerifyPassword(request.Password, user.PasswordLogin.PasswordHash))
+        if (user is null ||
+            !PasswordHasher.VerifyPassword(request.Password, user.PasswordHash))
         {
-            return ApiResult<TokenVm>.Fail(code: 401);
+            return ApiResult<TokenVm>.Fail("نام کاربری یا کلمه عبور اشتباه است", 401);
         }
 
         // 2. بررسی وضعیت کاربر

@@ -9,6 +9,9 @@ public class RoleClaimConfig : IEntityTypeConfiguration<RoleClaim>
     public void Configure(EntityTypeBuilder<RoleClaim> builder)
     {
         builder.ToTable("RoleClaim", "Auth");
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).UseIdentityColumn().ValueGeneratedOnAdd();
+
         builder.Property(x => x.Type).HasMaxLength(10).IsRequired();
         builder.Property(x => x.Value).HasMaxLength(30).IsRequired();
 

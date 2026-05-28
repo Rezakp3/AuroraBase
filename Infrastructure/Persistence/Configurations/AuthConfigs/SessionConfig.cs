@@ -9,6 +9,9 @@ public class SessionConfig : IEntityTypeConfiguration<Session>
     public void Configure(EntityTypeBuilder<Session> builder)
     {
         builder.ToTable("Session", "Auth");
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).UseIdentityColumn().ValueGeneratedOnAdd();
+
         builder.Property(x => x.IsRevoked).HasDefaultValue(false).ValueGeneratedOnAdd();
         builder.Property(x => x.DeviceName).IsRequired(false);
 

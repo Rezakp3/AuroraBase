@@ -1,12 +1,13 @@
 ﻿using Api.Attributes;
 using Api.Extentions;
 using Application;
+using Application.Common.Interfaces.Repositories;
 using Application.Common.Models;
 using Aurora.Cache;
 using Aurora.Captcha;
 using Aurora.Jwt;
+using Aurora.Jwt.Models;
 using Aurora.Logger;
-using EmailSender;
 using Infrastructure;
 using Infrastructure.Security.Authorization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -18,26 +19,36 @@ using System.Text;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
+    //.WriteTo.Seq("http://localhost:5341", apiKey: "NPtEAuuE6SpkH0u0kMw3")
     .CreateLogger();
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
+
+
 // Configuration
 var services = builder.Services;
 var appsetting = builder.Configuration.Get<AppSetting>() ?? new();
-services.AddSingleton(appsetting)
-    .AddSingleton(appsetting.JwtSettings)
-    .AddSingleton(appsetting.AuroraLog)
-    .AddSingleton(appsetting.EmailSettings);
 
+services.AddSingleton(appsetting)
+    .AddSingleton(appsetting.AuroraLog);
+
+builder.Services.AddProblemDetails(x => ApiResult.Fail(null, 500));
 services.AddCache();
 services.AddLogger();
 services.AddCaptcha();
 services.AddJwt();
-services.AddEmailSender();
 // Add Layers
 services.AddApplication();
 services.AddInfrastructure(builder.Configuration);
 
+//دریافت اطلاعات jwtsetting از دیتابیس
+IServiceProvider serviceProvider = services.BuildServiceProvider();
+var setting = serviceProvider.GetRequiredService<ISettingRepository>();
+var jwtSetting = await setting.GetByGroupAsync<JwtSettings>("JwtSettings");
+services.AddSingleton(jwtSetting);
+
+services.AddExceptionHandler<ExceptionHandler>();
 services.AddHttpContextAccessor();
 
 // CORS - Development: Allow Everything
@@ -45,7 +56,7 @@ services.AddCors(options =>
 {
     options.AddPolicy("DevCorsPolicy", policy =>
     {
-        policy.AllowAnyOrigin() 
+        policy.AllowAnyOrigin()
               .AllowAnyMethod()
               .AllowAnyHeader();
     });
@@ -83,7 +94,7 @@ services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "AuroraBase API", Version = "v1.0" });
 });
 
-builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
@@ -92,7 +103,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateIssuer = false,
 
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(appsetting.JwtSettings.SecretKey)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSetting.SecretKey)),
 
             ValidateLifetime = true,
             ClockSkew = TimeSpan.Zero
@@ -108,17 +119,19 @@ services.AddAuthorizationBuilder()
 var app = builder.Build();
 
 // ✅ Seed کردن داده‌ها در Startup
-if (app.Environment.IsDevelopment())
-{
-    await app.Services.SeedDatabaseAsync();
-}
+await app.Services.SeedDatabaseAsync();
 
 app.UseSwagger();
 app.UseSwaggerUI();
 
 app.UseHttpsRedirection();
 
-// CORS - باید قبل از Authentication باشد
+app.UseExceptionHandler(new ExceptionHandlerOptions
+{
+    // همیشه لاگ بزن (هیچوقت Suppress نکن)
+    SuppressDiagnosticsCallback = context => false
+});
+
 app.UseCors("DevCorsPolicy");
 
 app.UseAuthentication();

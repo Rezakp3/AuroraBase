@@ -16,8 +16,4 @@ public class MenuVm
     /// زیرمنوها
     /// </summary>
     public List<MenuVm> SubMenus { get; set; } = [];
-
-    // اگر نیاز به آیکون یا ترتیب باشد، اینجا اضافه می‌شود
-    // public string Icon { get; set; }
-    // public int Order { get; set; }
 }

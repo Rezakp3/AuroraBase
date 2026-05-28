@@ -9,7 +9,10 @@ public class RoleServiceConfig : IEntityTypeConfiguration<RoleService>
     public void Configure(EntityTypeBuilder<RoleService> builder)
     {
         builder.ToTable("RoleService", "Auth");
-        builder.HasKey(x => new { x.RoleId, x.ServiceId });
+        builder.HasKey(x => x.Id);
+        builder.Property(x => x.Id).UseIdentityColumn().ValueGeneratedOnAdd();
+
+        builder.HasIndex(x => new { x.RoleId, x.ServiceId }).IsUnique();
 
         builder.HasOne(x => x.Role)
             .WithMany(x => x.RoleServices)

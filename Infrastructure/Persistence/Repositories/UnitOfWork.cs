@@ -17,7 +17,6 @@ public class UnitOfWork(MyContext context, IServiceProvider serviceProvider) : I
     public ISettingRepository Settings => GetService<ISettingRepository>();
     public IUserRoleRepository UserRoles => GetService<IUserRoleRepository>();
     public IRoleServiceRepository RoleServices => GetService<IRoleServiceRepository>();
-    public IPasswordLoginRepository PasswordLogin => GetService<IPasswordLoginRepository>();
 
 
     #region navigations

@@ -47,7 +47,7 @@ public interface ISettingRepository : IRepository<Setting, int>
     /// <summary>
     /// دریافت مقدار با تبدیل نوع - در صورت عدم تبدیل مقدار defaultValue را برمیگرداند
     /// </summary>
-    Task<T?> GetValueOrDefaultAsync<T>(string key, T? defaultValue, string group = "General", CancellationToken cancellationToken = default);
+    Task<T?> GetValueOrDefaultAsync<T>(string key, T defaultValue, string group = "General", CancellationToken cancellationToken = default);
 
     #endregion
 

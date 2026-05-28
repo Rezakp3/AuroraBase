@@ -17,4 +17,14 @@ public class MenuRepository(MyContext context) : Repository<Menu, int>(context),
 
         return menues;
     }
+
+    public async Task<IEnumerable<Menu>> GetByUserId(long userId, CancellationToken cancellationToken)
+    {
+        var userMenus = await (from m in context.Menus
+                               join rm in context.RoleMenus on m.Id equals rm.MenuId
+                               join r in context.UserRoles on rm.RoleId equals r.RoleId
+                               where r.UserId == userId
+                               select m).ToListAsync(cancellationToken);
+        return userMenus;
+    }
 }

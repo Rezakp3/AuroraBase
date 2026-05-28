@@ -1,18 +1,14 @@
 using Aurora.Jwt.Models;
 using Aurora.Logger.Models;
-using EmailSender.ViewModel;
 
 namespace Application.Common.Models;
 
 public class AppSetting
 {
     public string AllowedHosts { get; set; } = string.Empty;
-    public int UserRoleId { get; set; }
-    public int AdminRoleId { get; set; }
     public ConnectionStrings ConnectionStrings { get; set; } = new();
     public JwtSettings JwtSettings { get; set; }
     public AuroraLogSettings AuroraLog { get; set; }
-    public EmailSettings EmailSettings { get; set; }
 }
 
 

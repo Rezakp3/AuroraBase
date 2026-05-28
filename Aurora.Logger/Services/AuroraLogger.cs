@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Serilog.Context;
 using System.Runtime.CompilerServices;
 using Aurora.Logger.Helpers;
-using Microsoft.Extensions.Options;
 
 namespace Aurora.Logger.Services;
 
@@ -21,6 +20,7 @@ public class AuroraLogger(
         [CallerLineNumber] int lineNumber = 0,
         [CallerMemberName] string memberName = "")
     {
+
         if (!options.IsEnabled || !logger.IsEnabled(level)) return;
 
         var className = Path.GetFileNameWithoutExtension(filePath);
