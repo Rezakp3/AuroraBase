@@ -61,7 +61,7 @@ public static class DefaultDataSeeder
         {
             var services = new List<Service>
             {
-                new() {  ServiceName = "Auth", ServiceIdentifier = "Auth.Test", Address = "/Auth/TestPermission" }
+                new() {  ServiceName = "Auth", ServiceIdentifier = "Auth.Logout", Address = "/Auth/Logout" }
             };
             await context.Services.AddRangeAsync(services);
             await context.SaveChangesAsync();

@@ -1,5 +1,7 @@
-﻿using Application.Common.Interfaces.Generals;
+﻿using Application.Common.Interfaces.ExternalServices;
+using Application.Common.Interfaces.Generals;
 using Application.Common.Interfaces.Repositories;
+using Infrastructure.ExternalService.SmsService;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Interceptors;
 using Infrastructure.Persistence.Repositories;
@@ -53,6 +55,7 @@ public static class DependencyInjection
         services.Decorate<IRoleServiceRepository, CachedRoleServiceRepository>();
         services.AddScoped<IAuthorizationHandler, DynamicPermissionHandler>();
 
+        services.AddTransient<ISmsService, SmsIrService>();
         return services;
     }
 

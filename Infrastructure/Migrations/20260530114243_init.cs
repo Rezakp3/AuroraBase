@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class Init : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -24,8 +24,8 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Route = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Route = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ParentId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -46,7 +46,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
@@ -64,7 +64,7 @@ namespace Infrastructure.Migrations
                     ServiceName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
-                    ServiceIdentifier = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    ServiceIdentifier = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -99,7 +99,18 @@ namespace Infrastructure.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false, defaultValue: 2),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    FName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    LName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: true),
+                    OtpCode = table.Column<string>(type: "nvarchar(6)", maxLength: 6, nullable: true),
+                    TryCount = table.Column<int>(type: "int", nullable: false),
+                    OtpExpireDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ResetPasswordToken = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    ResetPasswordTokenExpireDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GetDate()")
                 },
                 constraints: table =>
                 {
@@ -134,13 +145,14 @@ namespace Infrastructure.Migrations
                 schema: "Auth",
                 columns: table => new
                 {
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    MenuId = table.Column<int>(type: "int", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    MenuId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoleMenu", x => new { x.RoleId, x.MenuId });
+                    table.PrimaryKey("PK_RoleMenu", x => x.Id);
                     table.ForeignKey(
                         name: "FK_RoleMenu_Menu_MenuId",
                         column: x => x.MenuId,
@@ -161,13 +173,14 @@ namespace Infrastructure.Migrations
                 schema: "Auth",
                 columns: table => new
                 {
-                    MenuId = table.Column<int>(type: "int", nullable: false),
-                    ServiceId = table.Column<int>(type: "int", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MenuId = table.Column<int>(type: "int", nullable: false),
+                    ServiceId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_MenuService", x => new { x.MenuId, x.ServiceId });
+                    table.PrimaryKey("PK_MenuService", x => x.Id);
                     table.ForeignKey(
                         name: "FK_MenuService_Menu_MenuId",
                         column: x => x.MenuId,
@@ -188,13 +201,14 @@ namespace Infrastructure.Migrations
                 schema: "Auth",
                 columns: table => new
                 {
-                    RoleId = table.Column<int>(type: "int", nullable: false),
-                    ServiceId = table.Column<int>(type: "int", nullable: false),
                     Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    ServiceId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_RoleService", x => new { x.RoleId, x.ServiceId });
+                    table.PrimaryKey("PK_RoleService", x => x.Id);
                     table.ForeignKey(
                         name: "FK_RoleService_Role_RoleId",
                         column: x => x.RoleId,
@@ -212,44 +226,16 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PasswordLogin",
-                schema: "Auth",
-                columns: table => new
-                {
-                    UserId = table.Column<long>(type: "bigint", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    EmailIsVerified = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
-                    EmailVerificationCode = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
-                    VerifyCodeExpireDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    UserName = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    LastUpdateDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Id = table.Column<int>(type: "int", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_PasswordLogin", x => x.UserId);
-                    table.ForeignKey(
-                        name: "FK_PasswordLogin_Users_UserId",
-                        column: x => x.UserId,
-                        principalSchema: "Auth",
-                        principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Session",
                 schema: "Auth",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false, defaultValueSql: "NEWID()"),
                     ExpireDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     IsRevoked = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     DeviceName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Jti = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    RefreshToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Jti = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -265,20 +251,21 @@ namespace Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "UserClaims",
+                name: "UserClaim",
+                schema: "Auth",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClaimType = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserClaims", x => x.Id);
+                    table.PrimaryKey("PK_UserClaim", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserClaims_Users_UserId",
+                        name: "FK_UserClaim_Users_UserId",
                         column: x => x.UserId,
                         principalSchema: "Auth",
                         principalTable: "Users",
@@ -321,6 +308,13 @@ namespace Infrastructure.Migrations
                 column: "ParentId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_MenuService_MenuId_ServiceId",
+                schema: "Auth",
+                table: "MenuService",
+                columns: new[] { "MenuId", "ServiceId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
                 name: "IX_MenuService_ServiceId",
                 schema: "Auth",
                 table: "MenuService",
@@ -337,6 +331,20 @@ namespace Infrastructure.Migrations
                 schema: "Auth",
                 table: "RoleMenu",
                 column: "MenuId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoleMenu_RoleId_MenuId",
+                schema: "Auth",
+                table: "RoleMenu",
+                columns: new[] { "RoleId", "MenuId" },
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RoleService_RoleId_ServiceId",
+                schema: "Auth",
+                table: "RoleService",
+                columns: new[] { "RoleId", "ServiceId" },
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_RoleService_ServiceId",
@@ -364,8 +372,9 @@ namespace Infrastructure.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserClaims_UserId",
-                table: "UserClaims",
+                name: "IX_UserClaim_UserId",
+                schema: "Auth",
+                table: "UserClaim",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -390,10 +399,6 @@ namespace Infrastructure.Migrations
                 schema: "Auth");
 
             migrationBuilder.DropTable(
-                name: "PasswordLogin",
-                schema: "Auth");
-
-            migrationBuilder.DropTable(
                 name: "RoleClaim",
                 schema: "Auth");
 
@@ -414,7 +419,8 @@ namespace Infrastructure.Migrations
                 schema: "Config");
 
             migrationBuilder.DropTable(
-                name: "UserClaims");
+                name: "UserClaim",
+                schema: "Auth");
 
             migrationBuilder.DropTable(
                 name: "UserRole",

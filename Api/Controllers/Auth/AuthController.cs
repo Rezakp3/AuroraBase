@@ -19,30 +19,14 @@ public class AuthController(IMediator mediator) : BaseController(mediator)
         return await Sender(command);
     }
 
-    /// <summary>
-    /// ثبت نام کاربر جدید با رمز عبور
-    /// </summary>
     [HttpPost]
-    [AllowAnonymous]
-    public Task<IActionResult> RegisterWithPassword([FromBody] RegisterWithPasswordCommand command) => Sender(command);
-
-    /// <summary>
-    /// ثبت نام کاربر جدید با رمز عبور
-    /// </summary>
-    [HttpPost]
-    [AllowAnonymous]
-    public Task<IActionResult> RegisterWithPasswordCaptcha([FromBody] RegisterWithPasswordCaptchaCommand command) => Sender(command);
+    public Task<IActionResult> RegisterWithOtp([FromBody] RegisterWithOtpCommand command) => Sender(command);
 
     [HttpPost]
-    [AllowAnonymous]
-    public Task<IActionResult> LoginWithPassword([FromBody] LoginWithPasswordCommand command) => Sender(command);
+    public Task<IActionResult> SendOtp([FromBody] SendOtpCommand command) => Sender(command);
 
-    /// <summary>
-    /// ورود کاربر با نام کاربری/ایمیل و رمز عبور
-    /// </summary>
     [HttpPost]
-    [AllowAnonymous]
-    public Task<IActionResult> LoginWithPasswordCaptcha([FromBody] LoginWithPasswordCaptchaCommand command) => Sender(command);
+    public Task<IActionResult> LoginWithOtp([FromBody] LoginWithOtpCommand command) => Sender(command);
 
     /// <summary>
     /// رفرش کردن Access Token با استفاده از Refresh Token
@@ -61,21 +45,4 @@ public class AuthController(IMediator mediator) : BaseController(mediator)
 
     #endregion
 
-    #region Change password
-
-    [HttpPut]
-    [AutoPermission(true)]
-    public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordCommand request)
-        => await Sender(request);
-
-    #endregion
-
-    #region reset password
-
-    [HttpPost]
-    [AllowAnonymous]
-    public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordCommand request)
-        => await Sender(request);
-
-    #endregion
 }

@@ -21,7 +21,6 @@ public class LogoutCommand : IBaseRequest
 
 internal class LogoutCommandHandler(
     IUnitOfWork uow,
-    IJwtService jwtService,
     ITokenManager tokenManager,
     IHttpContextAccessor accessor)
     : IBaseHandler<LogoutCommand>
@@ -51,11 +50,9 @@ internal class LogoutCommandHandler(
         // 3. پیدا کردن و ابطال نشست (Session)
         var session = await uow.Sessions.GetByTokenAsync(request.RefreshToken, cancellationToken);
 
+        // اگر نشست پیدا نشد، ممکن است قبلاً منقضی یا باطل شده باشد. عملیات موفق است.
         if (session == null)
-        {
-            // اگر نشست پیدا نشد، ممکن است قبلاً منقضی یا باطل شده باشد. عملیات موفق است.
             return ApiResult.Success();
-        }
 
         uow.Sessions.Delete(session);
         await uow.SaveChangesAsync(cancellationToken);

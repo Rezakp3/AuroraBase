@@ -34,5 +34,5 @@ public interface IJwtService
     /// <param name="token">JWT Token</param>
     /// <param name="jwtSettings">تنظیمات JWT</param>
     /// <returns>لیست Claims</returns>
-    public ClaimsPrincipal? GetPrincipalFromToken(string token);
+    public ClaimsPrincipal GetPrincipalFromToken(string token);
 }

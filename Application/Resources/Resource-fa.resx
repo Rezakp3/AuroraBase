@@ -145,6 +145,6 @@
     <value>خطا داخلی</value>
   </data>
   <data name="1001" xml:space="preserve">
-    <value>نام کاربری یا ایمیل تکراری است</value>
+    <value>نام کاربری تکراری است</value>
   </data>
 </root>
