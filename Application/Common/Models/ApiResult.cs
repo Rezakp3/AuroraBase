@@ -1,4 +1,5 @@
-﻿using System.Security.Cryptography.X509Certificates;
+﻿using System.Runtime.CompilerServices;
+using System.Security.Cryptography.X509Certificates;
 
 namespace Application.Common.Models;
 
@@ -117,6 +118,12 @@ public static class ApiResultHelper
         public ApiResult<T> NotFound(string fieldName = null)
             => apiResult.Fail(404, $"{fieldName} یافت نشد");
     }
+
+    public static ApiResult ToApiResult(this bool res)
+        => res ? ApiResult.Success() : ApiResult.Fail();
+
+    public static ApiResult ToApiResult(this int res)
+        => res <= 0 ? ApiResult.Success() : ApiResult.Fail();
 }
 public class ValidationError
 {

@@ -16,7 +16,7 @@ public class CursorPagingOption<TKey> where TKey : struct
     /// مقدار فیلد مرتب‌سازی برای آخرین آیتم (برای Keyset Pagination صحیح)
     /// مثال: اگر SortBy = "CreatedDate" باشد، این مقدار باید آخرین CreatedDate دریافت شده باشد
     /// </summary>
-    public object? LastSortValue { get; set; }
+    public object LastSortValue { get; set; }
 
     /// <summary>
     /// تعداد آیتم‌های مورد نیاز (حداقل 1، حداکثر 100)
@@ -35,7 +35,7 @@ public class CursorPagingOption<TKey> where TKey : struct
     /// <summary>
     /// نام فیلد برای مرتب‌سازی
     /// </summary>
-    public string? SortBy { get; set; }
+    public string SortBy { get; set; }
 
     /// <summary>
     /// جهت مرتب‌سازی

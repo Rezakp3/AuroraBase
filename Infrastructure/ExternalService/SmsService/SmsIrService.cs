@@ -14,7 +14,6 @@ public class SmsIrService(ISettingRepository setting) : ISmsService
     {
         try
         {
-            var jwt = await setting.GetByGroupAsync<JwtSettings>(nameof(JwtSettings));
             var smsSetting = await setting.GetByGroupAsync<SmsSettings>("SmsSettings");
             SmsIr smsIr = new(smsSetting.ApiToken);
 

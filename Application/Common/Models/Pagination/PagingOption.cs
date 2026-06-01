@@ -34,7 +34,7 @@ public class PagingOption
     /// <summary>
     /// نام فیلد برای مرتب‌سازی
     /// </summary>
-    public string? SortBy { get; set; }
+    public string SortBy { get; set; }
 
     /// <summary>
     /// جهت مرتب‌سازی
@@ -47,13 +47,13 @@ public class PagingOption
     /// ID آخرین آیتم از صفحه قبل (برای بهبود Performance)
     /// اگر مقداردهی شود، از Cursor-Based استفاده می‌کند به جای OFFSET
     /// </summary>
-    public object? LastId { get; set; }
+    public object LastId { get; set; }
 
     /// <summary>
     /// مقدار فیلد مرتب‌سازی برای آخرین آیتم از صفحه قبل
     /// برای Keyset Pagination صحیح
     /// </summary>
-    public object? LastSortValue { get; set; }
+    public object LastSortValue { get; set; }
 
     /// <summary>
     /// آیا TotalCount محاسبه شود؟
