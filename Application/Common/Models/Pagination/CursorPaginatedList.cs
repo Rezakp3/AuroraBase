@@ -16,7 +16,7 @@ public class CursorPaginatedList<T, TKey>(List<T> items, TKey? lastId, object? l
     /// مقدار فیلد مرتب‌سازی برای آخرین آیتم (برای درخواست بعدی)
     /// فرانت باید این مقدار را در درخواست بعدی به عنوان LastSortValue ارسال کند
     /// </summary>
-    public object? LastSortValue { get; set; } = lastSortValue;
+    public object LastSortValue { get; set; } = lastSortValue;
 
     /// <summary>
     /// تعداد آیتم‌های درخواست شده
@@ -40,7 +40,7 @@ public class CursorPaginatedList<T, TKey>(List<T> items, TKey? lastId, object? l
     public static CursorPaginatedList<T, TKey> Create(
         List<T> items,
         TKey? lastId,
-        object? lastSortValue,
+        object lastSortValue,
         int pageSize,
         bool hasMore) => new(items, lastId, lastSortValue, pageSize, hasMore);
 

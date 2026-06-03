@@ -24,15 +24,14 @@ public class CachedSettingRepository(
     /// </summary>
     protected override async Task InvalidateRelatedCacheAsync(Setting entity, CancellationToken ct)
     {
-        // 1. پاک کردن کش خود آیتم (با ID) - توسط کلاس پدر هم انجام می‌شود اما اینجا صریح می‌گوییم
         await _cache.RemoveAsync(GetIdKey(entity.Id), ct);
 
-        // 2. حیاتی: پاک کردن کش گروه مربوطه (چون لیست گروه تغییر کرده)
-        // مثال: settings:Smtp:ALL
         var groupKey = CacheKeyBuilder.ForSetting(entity.Group, "ALL");
         await _cache.RemoveAsync(groupKey, ct);
 
-        // 3. پاک کردن لیست گروه‌ها (چون شاید این تنظیم، یک گروه جدید ایجاد کرده باشد)
+        // ابطال کش مربوط به GetAll
+        await _cache.RemoveAsync(GetAllKey(), ct);
+
         await _cache.RemoveAsync($"{CachePrefix}:groups:list", ct);
     }
 
@@ -143,11 +142,11 @@ public class CachedSettingRepository(
 
         if (result)
         {
-            // دستی: باید کش گروه را باطل کنیم
-            // ما نمی‌توانیم از InvalidateRelatedCacheAsync استفاده کنیم چون آبجکت Setting کامل را نداریم
-            // پس دستی کلید گروه را می‌سازیم و پاک می‌کنیم
             var groupKey = CacheKeyBuilder.ForSetting(group, "ALL");
             await _cache.RemoveAsync(groupKey, cancellationToken);
+
+            // پاک کردن کش کل لیست تنظیمات
+            await _cache.RemoveAsync(GetAllKey(), cancellationToken);
         }
 
         return result;

@@ -8,8 +8,8 @@ public class PaginatedList<T>(
     int pageNumber,
     int pageSize,
     int? totalCount = null,
-    object? lastId = null,
-    object? lastSortValue = null,
+    object lastId = null,
+    object lastSortValue = null,
     bool? hasMore = null)
 {
     public List<T> Items { get; set; } = items;
@@ -34,12 +34,12 @@ public class PaginatedList<T>(
     /// ID آخرین آیتم در این صفحه (برای درخواست صفحه بعدی)
     /// فرانت باید این مقدار را در درخواست بعدی به عنوان LastId ارسال کند
     /// </summary>
-    public object? LastId { get; set; } = lastId;
+    public object LastId { get; set; } = lastId;
 
     /// <summary>
     /// مقدار فیلد مرتب‌سازی برای آخرین آیتم (برای درخواست صفحه بعدی)
     /// </summary>
-    public object? LastSortValue { get; set; } = lastSortValue;
+    public object LastSortValue { get; set; } = lastSortValue;
 
     /// <summary>
     /// آیا صفحه بعدی وجود دارد؟ (زمانی که TotalCount محاسبه نشده)
@@ -51,8 +51,8 @@ public class PaginatedList<T>(
         int pageNumber,
         int pageSize,
         int? totalCount = null,
-        object? lastId = null,
-        object? lastSortValue = null,
+        object lastId = null,
+        object lastSortValue = null,
         bool? hasMore = null) 
         => new(items, pageNumber, pageSize, totalCount, lastId, lastSortValue, hasMore);
 

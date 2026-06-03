@@ -12,7 +12,7 @@ public class RoleConfig : IEntityTypeConfiguration<Role>
         builder.HasKey(x => x.Id);
         builder.Property(x => x.Id).UseIdentityColumn().ValueGeneratedOnAdd();
 
-        builder.Property(x => x.Name).HasMaxLength(20);
+        builder.Property(x => x.Name).IsRequired().HasMaxLength(20);
         builder.Property(x => x.Title).IsRequired(false).HasMaxLength(50);
 
         builder.HasMany(x => x.RoleMenus)
