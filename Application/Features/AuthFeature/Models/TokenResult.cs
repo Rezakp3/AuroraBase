@@ -14,5 +14,5 @@ public class TokenVm
     public DateTime ExpireTime { get; set; }
 
     public List<string> Roles { get; set; } = [];
-    public List<MenuVm> Menus { get; set; } = [];
+    public List<MenuDto> Menus { get; set; } = [];
 }

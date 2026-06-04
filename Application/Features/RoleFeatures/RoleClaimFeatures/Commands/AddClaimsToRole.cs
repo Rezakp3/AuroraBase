@@ -1,13 +1,10 @@
 ﻿using Application.Common.Interfaces.Generals;
 using Application.Common.Models;
-using Application.Features.RoleFeatures.Models;
-using System;
-using System.Collections.Generic;
+using Application.Features.RoleFeatures.RoleClaimFeatures.Models;
 using System.ComponentModel;
-using System.Text;
 using Utils.CustomAttributes;
 
-namespace Application.Features.RoleFeatures.Commands;
+namespace Application.Features.RoleFeatures.RoleClaimFeatures.Commands;
 
 public class AddClaimsToRoleCommand : IBaseRequest
 {

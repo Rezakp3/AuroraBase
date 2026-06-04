@@ -118,7 +118,7 @@ public class AuthService(
     /// <summary>
     /// متد داخلی برای دریافت نقش‌ها و منوهای مجاز کاربر
     /// </summary>
-    private async Task<(List<string> roleNames, List<MenuVm> menuVms)> GetUserAuthDataAsync(long userId, CancellationToken ct)
+    private async Task<(List<string> roleNames, List<MenuDto> menuVms)> GetUserAuthDataAsync(long userId, CancellationToken ct)
     {
         var roleIds = await uow.UserRoles.GetUserRoleIdsAsync(userId, ct);
         var roles = await uow.Roles.GetWhereAsync(r => roleIds.Contains(r.Id), ct);
@@ -142,9 +142,9 @@ public class AuthService(
     /// <summary>
     /// تبدیل لیست مسطح منوها به ساختار درختی
     /// </summary>
-    private static List<MenuVm> BuildMenuTree(List<Menu> flatMenus)
+    private static List<MenuDto> BuildMenuTree(List<Menu> flatMenus)
     {
-        var menuDict = flatMenus.ToDictionary(m => m.Id, m => new MenuVm
+        var menuDict = flatMenus.ToDictionary(m => m.Id, m => new MenuDto
         {
             Id = m.Id,
             Title = m.Title,
@@ -152,7 +152,7 @@ public class AuthService(
             ParentId = m.ParentId
         });
 
-        var rootMenus = new List<MenuVm>();
+        var rootMenus = new List<MenuDto>();
 
         foreach (var menuVm in menuDict.Values)
         {

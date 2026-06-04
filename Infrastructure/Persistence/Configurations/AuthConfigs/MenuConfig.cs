@@ -13,6 +13,9 @@ internal class MenuConfig : IEntityTypeConfiguration<Menu>
         builder.Property(x => x.Id).UseIdentityColumn().ValueGeneratedOnAdd();
 
         builder.Property(x => x.Title).HasMaxLength(50);
+        builder.Property(x=>x.IsActive).HasDefaultValue(true);
+
+        builder.Property(x => x.Route).HasMaxLength(150);
 
         builder.HasMany(x => x.SubMenu)
             .WithOne(x => x.Parent)

@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel;
 using Utils.CustomAttributes;
 
-namespace Application.Features.RoleFeatures.Models;
+namespace Application.Features.RoleFeatures.RoleClaimFeatures.Models;
 
 public class RoleClaimDto
 {

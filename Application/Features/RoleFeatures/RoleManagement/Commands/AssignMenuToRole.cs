@@ -3,7 +3,7 @@ using Application.Common.Models;
 using System.ComponentModel;
 using Utils.CustomAttributes;
 
-namespace Application.Features.RoleFeatures.Commands;
+namespace Application.Features.RoleFeatures.RoleManagement.Commands;
 
 public class AssignMenuToRoleCommand : IBaseRequest
 {

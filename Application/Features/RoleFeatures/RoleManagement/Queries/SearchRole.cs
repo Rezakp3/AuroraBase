@@ -1,9 +1,9 @@
 ﻿using Application.Common.Interfaces.Generals;
 using Application.Common.Models;
 using Application.Common.Models.Pagination;
-using Application.Features.RoleFeatures.Models;
+using Application.Features.RoleFeatures.RoleManagement.Models;
 
-namespace Application.Features.RoleFeatures.Queries;
+namespace Application.Features.RoleFeatures.RoleManagement.Queries;
 
 public class SearchRoleQuery : RoleIm, IBaseRequest<PaginatedList<RoleDto>>;
 

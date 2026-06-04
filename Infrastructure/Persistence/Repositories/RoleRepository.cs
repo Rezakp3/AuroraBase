@@ -1,6 +1,7 @@
 using Application.Common.Interfaces.Repositories;
 using Application.Common.Models.Pagination;
-using Application.Features.RoleFeatures.Models;
+using Application.Features.RoleFeatures.RoleClaimFeatures.Models;
+using Application.Features.RoleFeatures.RoleManagement.Models;
 using Core.Entities.Auth;
 using Core.Entities.Auth.Relation;
 using Infrastructure.Persistence.Helpers;
@@ -15,14 +16,14 @@ public class RoleRepository(MyContext context) : Repository<Role, int>(context),
     public void AddClaims(int roleId, IEnumerable<RoleClaimDto> claims, CancellationToken cancellationToken)
     {
         var validClaims = (from c in claims
-                          from rc in context.RoleClaims.Where(x => x.RoleId == roleId && c.Type == x.Type && c.Value == x.Value).DefaultIfEmpty()
-                          where rc is null
-                          select new RoleClaim
-                          {
-                              RoleId = roleId,
-                              Type = c.Type,
-                              Value = c.Value
-                          }).ToList();
+                           from rc in context.RoleClaims.Where(x => x.RoleId == roleId && c.Type == x.Type && c.Value == x.Value).DefaultIfEmpty()
+                           where rc is null
+                           select new RoleClaim
+                           {
+                               RoleId = roleId,
+                               Type = c.Type,
+                               Value = c.Value
+                           }).ToList();
 
         context.RoleClaims.AddRange(validClaims);
     }
@@ -44,6 +45,18 @@ public class RoleRepository(MyContext context) : Repository<Role, int>(context),
         context.RoleMenus.AddRange(list);
     }
 
+    public void DeleteRoleClaims(IEnumerable<int> ids)
+        => context.RoleClaims.RemoveRange(context.RoleClaims.Where(x => ids.Contains(x.Id)));
+
+    public async Task<RoleClaim> GetClaimByIdAsync(int id, CancellationToken cancellationToken)
+        => await context.RoleClaims.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+
+    public async Task<IEnumerable<RoleClaimDto>> GetClaimsByRoleIdAsync(int roleId, CancellationToken cancellationToken)
+        => await context.RoleClaims
+            .Where(x => x.RoleId == roleId)
+            .ProjectToType<RoleClaimDto>()
+            .ToListAsync(cancellationToken);
+
     public async Task<PaginatedList<RoleDto>> Search(RoleIm query, CancellationToken ct)
     {
         var q = dbSet.AsQueryable().ProjectToType<RoleDto>();
@@ -55,5 +68,4 @@ public class RoleRepository(MyContext context) : Repository<Role, int>(context),
 
         return await PaginationHelper.ApplyPageBasedPaginationAsync(q, query, ct);
     }
-
 }

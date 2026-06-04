@@ -10,13 +10,13 @@ using System.Text;
 
 namespace Application.Features.MenuFeature.Queries;
 
-public record GetUserMenusQuery : IBaseRequest<IEnumerable<MenuVm>>;
+public record GetUserMenusQuery : IBaseRequest<IEnumerable<MenuDto>>;
 
-internal class GetUserMenusQueryHandler(IUnitOfWork uow, IHttpContextAccessor accessor) : IBaseHandler<GetUserMenusQuery, IEnumerable<MenuVm>>
+internal class GetUserMenusQueryHandler(IUnitOfWork uow, IHttpContextAccessor accessor) : IBaseHandler<GetUserMenusQuery, IEnumerable<MenuDto>>
 {
-    public async Task<ApiResult<IEnumerable<MenuVm>>> Handle(GetUserMenusQuery request, CancellationToken cancellationToken)
+    public async Task<ApiResult<IEnumerable<MenuDto>>> Handle(GetUserMenusQuery request, CancellationToken cancellationToken)
     {
-        var res = new ApiResult<IEnumerable<MenuVm>>();
+        var res = new ApiResult<IEnumerable<MenuDto>>();
         var userId = accessor.GetUserId<long>();
 
         var data = await uow.Menus.GetByUserId(userId, cancellationToken);
@@ -28,7 +28,7 @@ internal class GetUserMenusQueryHandler(IUnitOfWork uow, IHttpContextAccessor ac
         return res.Success(mappedData);
     }
 
-    private static MenuVm Map(Menu menu, IEnumerable<Menu> all)
+    private static MenuDto Map(Menu menu, IEnumerable<Menu> all)
         => new()
         {
             Id = menu.Id,

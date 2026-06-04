@@ -15,6 +15,8 @@ public class ServiceConfig : IEntityTypeConfiguration<Service>
         builder.Property(x => x.ServiceName).HasMaxLength(30).IsRequired();
         builder.Property(x => x.Description).HasMaxLength(250).IsRequired(false);
         builder.Property(x => x.Address).HasMaxLength(60).IsRequired();
+        builder.Property(x => x.ServiceIdentifier).HasMaxLength(60).IsRequired();
+        
 
         builder.HasMany(x => x.MenuServices)
             .WithOne(x => x.Service)

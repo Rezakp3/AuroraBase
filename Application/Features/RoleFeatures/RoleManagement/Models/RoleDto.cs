@@ -1,4 +1,4 @@
-﻿namespace Application.Features.RoleFeatures.Models;
+﻿namespace Application.Features.RoleFeatures.RoleManagement.Models;
 
 public class RoleDto
 {

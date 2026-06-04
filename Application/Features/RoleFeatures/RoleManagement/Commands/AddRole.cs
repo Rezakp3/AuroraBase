@@ -5,7 +5,7 @@ using Mapster;
 using System.ComponentModel;
 using Utils.CustomAttributes;
 
-namespace Application.Features.RoleFeatures.Commands;
+namespace Application.Features.RoleFeatures.RoleManagement.Commands;
 
 public class AddRoleCommand : IBaseRequest
 {

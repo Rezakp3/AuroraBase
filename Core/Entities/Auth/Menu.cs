@@ -10,6 +10,8 @@ public class Menu : BaseEntity<int>
     public string Title { get; set; }
     public string Route { get; set; }
     public int? ParentId { get; set; }
+    public int Priority { get; set; }
+    public bool IsActive { get; set; }
 
     #endregion
 

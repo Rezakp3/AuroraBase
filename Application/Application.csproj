@@ -37,7 +37,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\MenuFeature\Commands\" />
     <Folder Include="Features\UsersFeature\Models\" />
     <Folder Include="Features\UsersFeature\Queries\" />
   </ItemGroup>

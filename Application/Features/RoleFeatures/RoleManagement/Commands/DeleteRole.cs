@@ -6,7 +6,7 @@ using System.ComponentModel;
 using System.Text;
 using Utils.CustomAttributes;
 
-namespace Application.Features.RoleFeatures.Commands;
+namespace Application.Features.RoleFeatures.RoleManagement.Commands;
 
 public class DeleteRoleCommand : IBaseRequest
 {

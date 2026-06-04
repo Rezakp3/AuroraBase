@@ -10,6 +10,7 @@ public class Service : BaseEntity<int>
     public string Description { get; set; }
     public string Address { get; set; }
     public string ServiceIdentifier { get; set; }
+
     #endregion
 
     #region relations

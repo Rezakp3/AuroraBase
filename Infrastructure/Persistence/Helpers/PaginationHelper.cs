@@ -16,7 +16,7 @@ public static class PaginationHelper
     /// اعمال صفحه‌بندی Page-Based با قابلیت Hybrid
     /// </summary>
     public static async Task<PaginatedList<TEntity>> ApplyPageBasedPaginationAsync<TEntity>(
-        IQueryable<TEntity> query,
+        this IQueryable<TEntity> query,
         PagingOption pagingOption,
         CancellationToken cancellationToken) where TEntity : class
     {
