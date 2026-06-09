@@ -54,6 +54,7 @@ internal class RegisterWithOtpHandler(
                 FName = request.FName,
                 LName = request.LName
             };
+
             await uow.Users.AddAsync(newUser, cancellationToken);
             await uow.SaveChangesAsync(cancellationToken);
 
@@ -68,7 +69,7 @@ internal class RegisterWithOtpHandler(
             // 6. پایان تراکنش
             await uow.CommitTransactionAsync(cancellationToken);
 
-            return ApiResult.Success();
+            return ApiResult.Success(otp.ToString());
         }
         catch (Exception)
         {

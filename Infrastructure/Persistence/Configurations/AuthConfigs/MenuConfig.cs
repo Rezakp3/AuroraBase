@@ -16,6 +16,7 @@ internal class MenuConfig : IEntityTypeConfiguration<Menu>
         builder.Property(x=>x.IsActive).HasDefaultValue(true);
 
         builder.Property(x => x.Route).HasMaxLength(150);
+        builder.Property(x => x.Icon).HasMaxLength(30);
 
         builder.HasMany(x => x.SubMenu)
             .WithOne(x => x.Parent)
@@ -26,11 +27,11 @@ internal class MenuConfig : IEntityTypeConfiguration<Menu>
         builder.HasMany(x => x.RoleMenus)
             .WithOne(x => x.Menu)
             .HasForeignKey(x => x.MenuId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(x => x.MenuServices)
             .WithOne(x => x.Menu)
             .HasForeignKey(x => x.MenuId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

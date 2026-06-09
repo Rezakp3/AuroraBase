@@ -18,7 +18,7 @@ internal class GetServicByMenuIdHandler(IUnitOfWork uow)
 {
     public async Task<ApiResult<PaginatedList<ServiceDto>>> Handle(GetServicByMenuIdQuery request, CancellationToken cancellationToken)
     {
-        PaginatedList<ServiceDto> data = await uow.Services.GetByMenuIdAsync(request.MenuId, request, cancellationToken);
+        var data = await uow.Services.GetByMenuIdAsync(request.MenuId, request, cancellationToken);
 
         return ApiResult<PaginatedList<ServiceDto>>.Success(data);
     }

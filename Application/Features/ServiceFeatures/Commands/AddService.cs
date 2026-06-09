@@ -2,11 +2,15 @@
 using Application.Common.Models;
 using Application.Features.ServiceFeatures.Models;
 using Core.Entities.Auth;
+using Core.Entities.Auth.Relation;
 using Mapster;
 
 namespace Application.Features.ServiceFeatures.Commands;
 
-public class AddServiceCommand : AddServiceIm , IBaseRequest;
+public class AddServiceCommand : AddServiceIm, IBaseRequest
+{
+    public IEnumerable<int> Roles { get; set; }
+}
 
 internal class AddServiceHandler(IUnitOfWork uow) : IBaseHandler<AddServiceCommand>
 {
@@ -14,7 +18,14 @@ internal class AddServiceHandler(IUnitOfWork uow) : IBaseHandler<AddServiceComma
     {
         var service = request.Adapt<Service>();
 
-        await uow.Services.AddAsync(service,cancellationToken);
+        if (request.Roles is not null && request.Roles.Any())
+            service.RoleServices = [.. request.Roles
+                .Select(x => new RoleService
+                {
+                    RoleId = x
+                })];
+
+        await uow.Services.AddAsync(service, cancellationToken);
 
         var res = await uow.SaveChangesAsync(cancellationToken);
 

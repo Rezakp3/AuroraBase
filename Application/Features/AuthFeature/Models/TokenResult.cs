@@ -1,4 +1,5 @@
 ﻿using Application.Features.MenuFeature.Models;
+using Application.Features.ServiceFeatures.Models;
 
 namespace Application.Features.Auth.Models;
 
@@ -15,4 +16,5 @@ public class TokenVm
 
     public List<string> Roles { get; set; } = [];
     public List<MenuDto> Menus { get; set; } = [];
+    public List<ServiceDto> Services { get; set; } = [];
 }

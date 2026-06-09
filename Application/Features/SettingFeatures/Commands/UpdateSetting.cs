@@ -12,6 +12,7 @@ public class UpdateSettingCommand : IBaseRequest
     [RequiredFa, DisplayName("مقدار")]
     public string Value { get; set; }
 }
+
 internal class UpdateSettingHandler(IUnitOfWork uow) : IBaseHandler<UpdateSettingCommand>
 {
     public async Task<ApiResult> Handle(UpdateSettingCommand request, CancellationToken cancellationToken)

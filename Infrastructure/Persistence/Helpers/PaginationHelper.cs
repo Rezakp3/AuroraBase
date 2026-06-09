@@ -115,7 +115,7 @@ public static class PaginationHelper
     /// اعمال صفحه‌بندی Cursor-Based
     /// </summary>
     public static async Task<CursorPaginatedList<TEntity, TKey>> ApplyCursorBasedPaginationAsync<TEntity, TKey>(
-        IQueryable<TEntity> query,
+        this IQueryable<TEntity> query,
         CursorPagingOption<TKey> cursorPagingOption,
         CancellationToken cancellationToken)
         where TEntity : class

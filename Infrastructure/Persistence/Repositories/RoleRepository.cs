@@ -1,4 +1,5 @@
 using Application.Common.Interfaces.Repositories;
+using Application.Common.Models;
 using Application.Common.Models.Pagination;
 using Application.Features.RoleFeatures.RoleClaimFeatures.Models;
 using Application.Features.RoleFeatures.RoleManagement.Models;
@@ -11,7 +12,8 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories;
 
-public class RoleRepository(MyContext context) : Repository<Role, int>(context), IRoleRepository
+public class RoleRepository(MyContext context)
+    : Repository<Role, int>(context), IRoleRepository
 {
     public void AddClaims(int roleId, IEnumerable<RoleClaimDto> claims, CancellationToken cancellationToken)
     {
@@ -47,6 +49,22 @@ public class RoleRepository(MyContext context) : Repository<Role, int>(context),
 
     public void DeleteRoleClaims(IEnumerable<int> ids)
         => context.RoleClaims.RemoveRange(context.RoleClaims.Where(x => ids.Contains(x.Id)));
+
+    public async Task<CursorPaginatedList<BaseDropDown<int>, int>> DropDown(string search, CursorPagingOption<int> pagingOption, CancellationToken ct)
+    {
+        var query = context.Roles.AsNoTracking().AsQueryable();
+
+        if (!string.IsNullOrEmpty(search))
+            query = query.Where(x => x.Title.Contains(search) || x.Name.Contains(search));
+
+        var data = await query
+            .Select(x => new BaseDropDown<int>
+            {
+                Id = x.Id,
+                Value = x.Name
+            }).ApplyCursorBasedPaginationAsync(pagingOption, ct);
+        return data;
+    }
 
     public async Task<RoleClaim> GetClaimByIdAsync(int id, CancellationToken cancellationToken)
         => await context.RoleClaims.FirstOrDefaultAsync(x => x.Id == id, cancellationToken);

@@ -21,11 +21,11 @@ public class ServiceConfig : IEntityTypeConfiguration<Service>
         builder.HasMany(x => x.MenuServices)
             .WithOne(x => x.Service)
             .HasForeignKey(x => x.ServiceId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
 
         builder.HasMany(x => x.RoleServices)
             .WithOne(x => x.Service)
             .HasForeignKey(x => x.ServiceId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.NoAction);
     }
 }

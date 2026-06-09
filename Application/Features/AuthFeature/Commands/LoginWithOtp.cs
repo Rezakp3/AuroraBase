@@ -44,12 +44,14 @@ internal class LoginWithOtpHandler(IUnitOfWork uow, IAuthService authService) : 
         }
 
         user.TryCount = 0;
+        user.OtpCode = null;
+        user.OtpExpireDate = null;
         uow.Users.Update(user);
 
         // 5. تولید توکن‌ها و نشست (استفاده از سرویس مشترک)
         var tokenResult = await authService.GenerateAuthTokensAndSessionAsync(user, cancellationToken);
-
         uow.SaveChanges();
+
         return ApiResult<TokenVm>.Success(tokenResult);
     }
 }

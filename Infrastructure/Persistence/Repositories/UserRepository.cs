@@ -1,7 +1,13 @@
 ﻿using Application.Common.Interfaces.Repositories;
+using Application.Features.MenuFeature.Models;
+using Application.Features.RoleFeatures.RoleManagement.Models;
+using Application.Features.ServiceFeatures.Models;
+using Application.Services.Models;
 using Core.Entities.Auth;
 using Core.Enums;
+using DNTPersianUtils.Core;
 using Infrastructure.Persistence.Repositories.Base;
+using Mapster;
 using Microsoft.EntityFrameworkCore;
 using Utils.Helpers;
 
@@ -10,7 +16,7 @@ namespace Infrastructure.Persistence.Repositories;
 public class UserRepository(MyContext context) : Repository<User, long>(context), IUserRepository
 {
     // این متد برای لاگین استفاده می‌شود
-    public async Task<User> GetByUserNameAsync(string username, CancellationToken ct = default) 
+    public async Task<User> GetByUserNameAsync(string username, CancellationToken ct = default)
         => await dbSet.FirstOrDefaultAsync(u => u.UserName == username, ct);
 
     // این متد برای پروسه رفرش توکن و بررسی وضعیت کاربر استفاده می‌شود
@@ -33,4 +39,14 @@ public class UserRepository(MyContext context) : Repository<User, long>(context)
 
     public async Task<User> GetByResetToken(string resetPasswordToken, CancellationToken ct)
         => await dbSet.FirstOrDefaultAsync(x => x.ResetPasswordToken == resetPasswordToken, ct);
+
+    public async Task<IEnumerable<RoleDto>> GetUserRoles(long id, CancellationToken ct)
+        => await context.UserRoles
+            .Where(x => x.UserId == id)
+            .Join(context.Roles, ur => ur.RoleId, r => r.Id, (ur, r) => new RoleDto
+            {
+                Id = r.Id,
+                Name = r.Name,
+                Title = r.Title
+            }).ToListAsync(ct);
 }

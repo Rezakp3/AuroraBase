@@ -21,6 +21,8 @@ internal class DeleteMenuHandler(IUnitOfWork uow) : IBaseHandler<DeleteMenuComma
         var menu = await uow.Menus.GetByIdAsync(request.Id, cancellationToken);
         if (menu is null)
             return ApiResult.NotFound("منو");
+        await uow.Menus.DeleteMenuRolesByMenuId(request.Id, cancellationToken);
+        await uow.Menus.DeleteMenuServicesByMenuId(request.Id, cancellationToken);
         uow.Menus.Delete(menu);
         var res = await uow.SaveChangesAsync(cancellationToken);
         return res.ToApiResult();

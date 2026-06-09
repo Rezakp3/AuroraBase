@@ -26,7 +26,7 @@ internal class SendOtpHandler(IUnitOfWork uow, ISmsService smsService) : IBaseHa
         if (user == null)
             return ApiResult.NotFound("کاربر");
 
-        if (user.OtpExpireDate > DateTime.UtcNow && user.TryCount < 3)
+        if (user.OtpExpireDate > DateTime.UtcNow && user.TryCount < 3 && user.OtpCode is not null)
             return ApiResult.Fail("داداش کد قبلی هنوز منقضی نشده");
 
         var otp = RandomNumberGenerator.GetInt32(10000, 99999).ToString();
@@ -38,6 +38,6 @@ internal class SendOtpHandler(IUnitOfWork uow, ISmsService smsService) : IBaseHa
         await smsService.SendOtp(request.PhoneNumber, otp);
         var res = await uow.SaveChangesAsync(cancellationToken);
 
-        return res ? ApiResult.Success() : ApiResult.Fail();
+        return res ? ApiResult.Success(otp) : ApiResult.Fail();
     }
 }

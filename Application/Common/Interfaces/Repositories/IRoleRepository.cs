@@ -1,4 +1,5 @@
 ﻿using Application.Common.Interfaces.Generals;
+using Application.Common.Models;
 using Application.Common.Models.Pagination;
 using Application.Features.RoleFeatures.RoleClaimFeatures.Models;
 using Application.Features.RoleFeatures.RoleManagement.Models;
@@ -14,4 +15,5 @@ public interface IRoleRepository : IRepository<Role, int>
     void DeleteRoleClaims(IEnumerable<int> ids);
     Task<RoleClaim> GetClaimByIdAsync(int id, CancellationToken cancellationToken);
     Task<IEnumerable<RoleClaimDto>> GetClaimsByRoleIdAsync(int roleId, CancellationToken cancellationToken);
+    Task<CursorPaginatedList<BaseDropDown<int>, int>> DropDown(string search, CursorPagingOption<int> pagingOption, CancellationToken ct);
 }

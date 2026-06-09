@@ -7,6 +7,7 @@ public class Menu : BaseEntity<int>
 {
     #region properties
 
+    public string Icon { get; set; }
     public string Title { get; set; }
     public string Route { get; set; }
     public int? ParentId { get; set; }

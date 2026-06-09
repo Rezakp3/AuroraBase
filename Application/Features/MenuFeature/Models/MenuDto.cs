@@ -8,7 +8,10 @@ public class MenuDto
     public string Title { get; set; }
     public string Route { get; set; }
     public int? ParentId { get; set; }
+    public string ParentTitle { get; set; }
     public int Priority { get; set; }
+    public string Icon { get; set; }
+
     public bool IsActive { get; set; }
 
     /// <summary>

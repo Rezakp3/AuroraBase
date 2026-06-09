@@ -13,6 +13,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace Infrastructure;
 
@@ -28,8 +30,10 @@ public static class DependencyInjection
         {
             options.UseSqlServer(
                 configuration.GetConnectionString("DefaultConnection"),
-                b => b.MigrationsAssembly(typeof(MyContext).Assembly.FullName));
-            
+                b => b.MigrationsAssembly(typeof(MyContext).Assembly.FullName))
+                .EnableSensitiveDataLogging() // اختیاری: برای دیدن مقادیر پارامترها
+                .LogTo(message => Debug.WriteLine(message), LogLevel.Information);
+
             // ✅ اضافه کردن Interceptor
             options.AddInterceptors(new AuditableEntityInterceptor());
         });
@@ -64,7 +68,7 @@ public static class DependencyInjection
     {
         using var scope = serviceProvider.CreateScope();
         var context = scope.ServiceProvider.GetRequiredService<MyContext>();
-        
+
         await context.Database.MigrateAsync();
         await DefaultDataSeeder.SeedAsync(context);
 

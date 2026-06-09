@@ -35,6 +35,9 @@ internal class GetUserMenusQueryHandler(IUnitOfWork uow, IHttpContextAccessor ac
             ParentId = menu.ParentId,
             Route = menu.Route,
             Title = menu.Title,
+            IsActive = menu.IsActive,
+            Icon = menu.Icon,
+            Priority = menu.Priority,
             SubMenus = [.. all.Where(x => x.ParentId == menu.Id).Select(x => Map(x, all))],
         };
 }

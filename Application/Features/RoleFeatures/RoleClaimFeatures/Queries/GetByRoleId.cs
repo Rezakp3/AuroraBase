@@ -1,10 +1,7 @@
 ﻿using Application.Common.Interfaces.Generals;
 using Application.Common.Models;
 using Application.Features.RoleFeatures.RoleClaimFeatures.Models;
-using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Text;
 using Utils.CustomAttributes;
 
 namespace Application.Features.RoleFeatures.RoleClaimFeatures.Queries;
