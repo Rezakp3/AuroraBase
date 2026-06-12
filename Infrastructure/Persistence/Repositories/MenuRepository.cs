@@ -1,7 +1,7 @@
 using Application.Common.Interfaces.Repositories;
 using Application.Common.Models;
 using Application.Common.Models.Pagination;
-using Application.Features.MenuFeature.Models;
+using Application.Features.MenuFeature.MenuManagement.Models;
 using Core.Entities.Auth;
 using Core.Entities.Auth.Relation;
 using Infrastructure.Persistence.Helpers;
@@ -141,49 +141,49 @@ public class MenuRepository(MyContext context)
         await context.RoleMenus.AddRangeAsync(roleMenus, ct);
     }
 
-    public async Task<CursorPaginatedList<BaseDropDown<int>, int>> MenuRolesDropDown
-        (int menuId, string roleTitle, CursorPagingOption<int> paging, CancellationToken ct)
+    public async Task<IEnumerable<BaseDropDown<int>>> MenuRolesDropDown
+        (int menuId, string roleTitle, CancellationToken ct)
     {
-        var roleQuery = context.Roles.AsQueryable();
+        var roleQuery = context.Roles.AsNoTracking();
 
         if (!string.IsNullOrEmpty(roleTitle))
             roleQuery = roleQuery.Where(x => x.Title.Contains(roleTitle));
 
         var query = from r in roleQuery
-                    from rm in context.RoleMenus.Where(x => x.MenuId == menuId && x.RoleId == r.Id).DefaultIfEmpty()
+                    join rm in context.RoleMenus.Where(x => x.MenuId == menuId)
+                        on r.Id equals rm.RoleId into joinedRoleMenu
+                    from subRm in joinedRoleMenu.DefaultIfEmpty()
                     orderby r.Id
                     select new BaseDropDown<int>()
                     {
                         Id = r.Id,
                         Value = r.Title,
-                        IsSelected = rm != null
+                        IsSelected = subRm != null
                     };
 
-        var data = await query.AsNoTracking().ApplyCursorBasedPaginationAsync(paging, ct);
-
-        return data;
+        return await query.ToListAsync(ct);
     }
-
-    public async Task<CursorPaginatedList<BaseDropDown<int>, int>> MenuServicesDropDown
-        (int menuId, string roleTitle, CursorPagingOption<int> paging, CancellationToken ct)
+    public async Task<IEnumerable<BaseDropDown<int>>> MenuServicesDropDown
+    (int menuId, string serviceName,CancellationToken ct)
     {
-        var serviceQuery = context.Services.AsQueryable();
+        var serviceQuery = context.Services.AsNoTracking();
 
-        if (!string.IsNullOrEmpty(roleTitle))
-            serviceQuery = serviceQuery.Where(x => x.ServiceName.Contains(roleTitle));
+        if (!string.IsNullOrEmpty(serviceName))
+            serviceQuery = serviceQuery.Where(x => x.ServiceName.Contains(serviceName));
 
-        var query = from s in context.Services
-                    from ms in context.MenuServices.Where(x => x.MenuId == menuId && x.ServiceId == s.Id).DefaultIfEmpty()
+        var query = from s in serviceQuery
+                    join ms in context.MenuServices.Where(x => x.MenuId == menuId)
+                        on s.Id equals ms.ServiceId into joinedMenuServices
+                    from subMs in joinedMenuServices.DefaultIfEmpty()
                     orderby s.Id
-                    select new BaseDropDown<int>()
+                    select new BaseDropDown<int>
                     {
                         Id = s.Id,
                         Value = s.ServiceName,
-                        IsSelected = ms != null
+                        IsSelected = subMs != null
                     };
 
-        var data = await query.AsNoTracking().ApplyCursorBasedPaginationAsync(paging, ct);
-
-        return data;
+        return await query.ToListAsync(ct);
     }
+
 }

@@ -1,6 +1,8 @@
 ﻿using Api.Attributes;
 using Application.Features.ServiceFeatures.Commands;
 using Application.Features.ServiceFeatures.Queries;
+using Application.Features.ServiceFeatures.ServiceRelation.Commands;
+using Application.Features.ServiceFeatures.ServiceRelation.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -23,4 +25,16 @@ public class ServiceController(IMediator mediator) : BaseController(mediator)
     [HttpGet, AutoPermission]
     public async Task<IActionResult> Search([FromQuery] SearchServiceQuery query) 
         => await Sender(query);
+
+    [HttpGet, AutoPermission]
+    public async Task<IActionResult> DropDown([FromQuery] ServiceDropDownQuery query) 
+        => await Sender(query);
+
+    [HttpGet, AutoPermission]
+    public async Task<IActionResult> RolesDropDown([FromQuery] ServiceRoleDropDownQuery query) 
+        => await Sender(query);
+
+    [HttpPut, AutoPermission]
+    public async Task<IActionResult> ManageRoles([FromBody] ManageServiceRolesCommand command) 
+        => await Sender(command);
 }

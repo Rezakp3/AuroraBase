@@ -2,6 +2,8 @@
 using Application.Features.RoleFeatures.RoleClaimFeatures.Commands;
 using Application.Features.RoleFeatures.RoleManagement.Commands;
 using Application.Features.RoleFeatures.RoleManagement.Queries;
+using Application.Features.RoleFeatures.RoleRelations.Commands;
+using Application.Features.RoleFeatures.RoleRelations.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -19,16 +21,27 @@ public class RoleController(IMediator mediator) : BaseController(mediator)
     public async Task<IActionResult> Delete([FromQuery] DeleteRoleCommand command) => await Sender(command);
 
     [HttpPost, AutoPermission]
-    public async Task<IActionResult> AssignServices([FromBody] AssignServicesToRoleCommand command) => await Sender(command);
-
-    [HttpPost, AutoPermission]
-    public async Task<IActionResult> AssignMenues([FromBody] AssignMenuToRoleCommand command) => await Sender(command);
-
-    [HttpPost, AutoPermission]
     public async Task<IActionResult> AddClaims([FromBody] AddClaimsToRoleCommand command) => await Sender(command);
 
     [HttpGet, AutoPermission]
     public Task<IActionResult> Search([FromQuery] SearchRoleQuery command) => Sender(command);
+
     [HttpGet, AutoPermission]
     public async Task<IActionResult> DropDown([FromQuery] RoleDropDownQuery query) => await Sender(query);
+
+
+    [HttpGet, AutoPermission]
+    public async Task<IActionResult> ServiceDropDown([FromQuery] RoleServiceDropDownQuery query) => await Sender(query);
+
+    [HttpPut, AutoPermission]
+    public async Task<IActionResult> ManageServices([FromBody] ManageRoleServiceCommand command) => await Sender(command);
+
+
+    [HttpGet, AutoPermission]
+    public async Task<IActionResult> MenuDropDown([FromQuery] RoleMenuDropDownQuery query) => await Sender(query);
+
+    [HttpPut, AutoPermission]
+    public async Task<IActionResult> ManageMenus([FromBody] ManageRoleMenusCommand command) => await Sender(command);
+
+
 }

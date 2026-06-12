@@ -13,5 +13,6 @@ public interface IServiceRepository : IRepository<Service, int>
     Task<List<ServiceDto>> GetServicesByRoleIds(IEnumerable<int> userRoleIds, CancellationToken ct);
     Task<PaginatedList<ServiceDto>> Search(SearchServiceIm search, CancellationToken ct);
     Task<CursorPaginatedList<BaseDropDown<int>, int>> DropDown(string search, CursorPagingOption<int> paging, CancellationToken ct);
+    Task<IEnumerable<BaseDropDown<int>>> RoleDropDown(int serviceId, string roleTitle, CancellationToken ct);
 }
 

@@ -21,7 +21,7 @@ namespace Infrastructure.Persistence.Configurations.AuthConfigs
             builder.HasOne(x => x.User)
                 .WithMany(x => x.Claims)
                 .HasForeignKey(x => x.UserId)
-                .OnDelete(DeleteBehavior.NoAction);
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

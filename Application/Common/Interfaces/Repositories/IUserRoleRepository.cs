@@ -11,4 +11,6 @@ public interface IUserRoleRepository : IRepository<UserRole, int>
     // مدیریت انتساب نقش به کاربر
     Task AssignRoleToUserAsync(long userId, int roleId, CancellationToken ct = default);
     Task RemoveRoleFromUserAsync(long userId, int roleId, CancellationToken ct = default);
+
+    Task SyncUserRolesAsync(long userId, IEnumerable<int> roleIds, CancellationToken ct = default);
 }

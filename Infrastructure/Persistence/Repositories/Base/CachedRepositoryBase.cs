@@ -1,7 +1,8 @@
-﻿using System.Linq.Expressions;
-using Application.Common.Interfaces.Generals;
+﻿using Application.Common.Interfaces.Generals;
 using Application.Common.Models.Pagination;
 using Aurora.Cache.Services;
+using System.Linq.Expressions;
+using System.Threading;
 
 namespace Infrastructure.Persistence.Repositories.Base;
 
@@ -168,6 +169,14 @@ public abstract class CachedRepositoryBase<TEntity, TKey>(
             // خود کلید ID را هم پاک کن
             await cache.RemoveAsync(GetIdKey(id), cancellationToken);
         }
+        return result;
+    }
+
+    public TEntity Add(TEntity entity)
+    {
+        var result = _innerRepo.Add(entity);
+        // بعد از اضافه کردن، باید کش‌های لیست (GetAll) یا مرتبط را پاک کنیم
+        Task.Run(() => InvalidateRelatedCacheAsync(result, CancellationToken.None));
         return result;
     }
 

@@ -245,6 +245,11 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
                     b.Property<string>("DeviceName")
                         .HasColumnType("nvarchar(max)");
 
@@ -324,7 +329,7 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Status")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(2);
+                        .HasDefaultValue(0);
 
                     b.Property<int>("TryCount")
                         .HasColumnType("int");
@@ -436,7 +441,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Core.Entities.Auth.Service", "Service")
                         .WithMany("MenuServices")
                         .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Menu");
@@ -455,7 +460,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Core.Entities.Auth.Role", "Role")
                         .WithMany("RoleMenus")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Menu");
@@ -468,13 +473,13 @@ namespace Infrastructure.Migrations
                     b.HasOne("Core.Entities.Auth.Role", "Role")
                         .WithMany("RoleServices")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Core.Entities.Auth.Service", "Service")
                         .WithMany("RoleServices")
                         .HasForeignKey("ServiceId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Role");
@@ -487,13 +492,13 @@ namespace Infrastructure.Migrations
                     b.HasOne("Core.Entities.Auth.Role", "Role")
                         .WithMany("UserRoles")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Core.Entities.Auth.User", "User")
                         .WithMany("UserRoles")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Role");
@@ -506,7 +511,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Core.Entities.Auth.Role", "Role")
                         .WithMany("Claims")
                         .HasForeignKey("RoleId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Role");
@@ -517,7 +522,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Core.Entities.Auth.User", "User")
                         .WithMany("Sessions")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -528,7 +533,7 @@ namespace Infrastructure.Migrations
                     b.HasOne("Core.Entities.Auth.User", "User")
                         .WithMany("Claims")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.NoAction)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("User");

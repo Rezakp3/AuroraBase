@@ -1,4 +1,4 @@
-﻿using Application.Features.Auth.Models;
+﻿using Application.Features.AuthFeature.AuthManagement.Models;
 using Core.Entities.Auth;
 
 namespace Application.Common.Interfaces.Services;

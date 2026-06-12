@@ -9,11 +9,15 @@ namespace Application.Common.Interfaces.Repositories;
 
 public interface IRoleRepository : IRepository<Role, int>
 {
-    Task AssignMenuesToRole(int roleId, IEnumerable<int> menuIds, CancellationToken ct);
     Task<PaginatedList<RoleDto>> Search(RoleIm query, CancellationToken ct);
     void AddClaims(int roleId, IEnumerable<RoleClaimDto> claims, CancellationToken cancellationToken);
     void DeleteRoleClaims(IEnumerable<int> ids);
     Task<RoleClaim> GetClaimByIdAsync(int id, CancellationToken cancellationToken);
     Task<IEnumerable<RoleClaimDto>> GetClaimsByRoleIdAsync(int roleId, CancellationToken cancellationToken);
     Task<CursorPaginatedList<BaseDropDown<int>, int>> DropDown(string search, CursorPagingOption<int> pagingOption, CancellationToken ct);
+    Task<IEnumerable<BaseDropDown<int>>> ServiceDropDown(int roleId, string search, CancellationToken cancellationToken);
+    Task<IEnumerable<BaseDropDown<int>>> MenuDropDown(int roleId, string search, CancellationToken cancellationToken);
+    
+    Task DeleteMenues(int roleId, CancellationToken ct);
+    Task AddRangeMenues(int roleId, IEnumerable<int> menuIds, CancellationToken ct);
 }

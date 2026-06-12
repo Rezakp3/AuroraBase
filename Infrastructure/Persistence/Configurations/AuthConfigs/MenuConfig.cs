@@ -27,11 +27,11 @@ internal class MenuConfig : IEntityTypeConfiguration<Menu>
         builder.HasMany(x => x.RoleMenus)
             .WithOne(x => x.Menu)
             .HasForeignKey(x => x.MenuId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
 
         builder.HasMany(x => x.MenuServices)
             .WithOne(x => x.Menu)
             .HasForeignKey(x => x.MenuId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

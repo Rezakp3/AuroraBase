@@ -1,6 +1,7 @@
 ﻿using Api.Attributes;
-using Application.Features.AuthFeature.Commands;
-using Application.Features.AuthFeature.Queries;
+using Application.Features.AuthFeature.AuthManagement.Commands;
+using Application.Features.AuthFeature.AuthManagement.Queries;
+using Application.Features.AuthFeature.SessionManagement.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -41,8 +42,17 @@ public class AuthController(IMediator mediator) : BaseController(mediator)
     /// </summary>
     [HttpPost]
     [AutoPermission(true)]
-    public async Task<IActionResult> Logout([FromBody] LogoutCommand command) => await Sender(command);
+    public async Task<IActionResult> Logout([FromBody] LogoutCommand command)
+        => await Sender(command);
 
     #endregion
 
+    #region Session
+
+    [HttpGet]
+    [AutoPermission]
+    public async Task<IActionResult> SearchSession([FromQuery] SessionSearchQuery command)
+        => await Sender(command);
+
+    #endregion
 }

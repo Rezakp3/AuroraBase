@@ -46,5 +46,18 @@ public class CachedRoleServiceRepository(
         // و در نهایت یکبار کش را پاک کنیم
         await _cache.RemoveAsync(GetRolePermsKey(roleId), ct);
     }
+    public async Task<List<int>> SyncRolesForServiceAsync(int serviceId, IEnumerable<int> roleIds, CancellationToken ct = default)
+    {
+        // ۱. اجرای عملیات در دیتابیس و دریافت لیست نقش‌های تحت تأثیر
+        var affectedRoleIds = await _innerRepo.SyncRolesForServiceAsync(serviceId, roleIds, ct);
 
+        // ۲. ابطال کش دسترسی‌ها برای تک‌تک نقش‌های تحت تأثیر
+        foreach (var roleId in affectedRoleIds)
+        {
+            var permsKey = GetRolePermsKey(roleId); // auth:role:{roleId}:perms
+            await _cache.RemoveAsync(permsKey, ct);
+        }
+
+        return affectedRoleIds;
+    }
 }

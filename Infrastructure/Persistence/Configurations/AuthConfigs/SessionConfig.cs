@@ -14,9 +14,12 @@ public class SessionConfig : IEntityTypeConfiguration<Session>
 
         builder.Property(x => x.IsRevoked).HasDefaultValue(false).ValueGeneratedOnAdd();
         builder.Property(x => x.DeviceName).IsRequired(false);
+        builder.Property(x => x.CreatedDate)
+            .ValueGeneratedOnAdd()
+            .HasDefaultValueSql("GETDATE()");
 
         builder.HasOne(x => x.User)
             .WithMany(x => x.Sessions)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

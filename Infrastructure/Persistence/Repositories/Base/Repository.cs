@@ -178,5 +178,10 @@ public class Repository<TEntity, TKey> : IRepository<TEntity, TKey>
         return true;
     }
 
+    public TEntity Add(TEntity entity)
+    {
+        var entry = dbSet.Add(entity);
+        return entry.Entity;
+    }
     #endregion
 }

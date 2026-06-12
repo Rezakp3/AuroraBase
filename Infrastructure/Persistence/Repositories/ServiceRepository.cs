@@ -18,7 +18,7 @@ public class ServiceRepository(MyContext context)
     {
         var query = dbSet.AsNoTracking().AsQueryable();
 
-        if (!string.IsNullOrEmpty(search.Trim()))
+        if (!string.IsNullOrEmpty(search))
             query = query.Where(x => x.ServiceName.Contains(search) || x.ServiceIdentifier.Contains(search));
 
         return await query.Select(x => new BaseDropDown<int>()
@@ -54,6 +54,26 @@ public class ServiceRepository(MyContext context)
                   join s in context.Services on rs.ServiceId equals s.Id
                   select s).Distinct().ProjectToType<ServiceDto>().ToListAsync(ct);
 
+    public async Task<IEnumerable<BaseDropDown<int>>> RoleDropDown(int serviceId, string roleTitle, CancellationToken ct)
+    {
+        var roleQuery = context.Roles.AsNoTracking();
+
+        if (!string.IsNullOrEmpty(roleTitle))
+            roleQuery = roleQuery.Where(x => x.Title.Contains(roleTitle) || x.Name.Contains(roleTitle));
+
+        var query = from r in roleQuery
+                    join rs in context.RoleServices.Where(x => x.ServiceId == serviceId)
+                        on r.Id equals rs.RoleId into joinedRoleService
+                    from subRs in joinedRoleService.DefaultIfEmpty()
+                    select new BaseDropDown<int>
+                    {
+                        Id = r.Id,
+                        Value = r.Name,
+                        IsSelected = subRs != null
+                    };
+
+        return await query.ToListAsync(ct);
+    }
 
     public async Task<PaginatedList<ServiceDto>> Search(SearchServiceIm search, CancellationToken ct)
     {

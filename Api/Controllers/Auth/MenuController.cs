@@ -1,6 +1,8 @@
 ﻿using Api.Attributes;
-using Application.Features.MenuFeature.Commands;
-using Application.Features.MenuFeature.Queries;
+using Application.Features.MenuFeature.MenuManagement.Commands;
+using Application.Features.MenuFeature.MenuManagement.Queries;
+using Application.Features.MenuFeature.MenuRelations.Commands;
+using Application.Features.MenuFeature.MenuRelations.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
@@ -20,15 +22,30 @@ public class MenuController(IMediator mediator) : BaseController(mediator)
     [HttpDelete, AutoPermission]
     public async Task<IActionResult> Delete([FromQuery] DeleteMenuCommand command) => await Sender(command);
 
-    [HttpPut, AutoPermission]
-    public Task<IActionResult> ManageServices([FromBody] ManageMenuServiceCommand command) => Sender(command);
-
-    [HttpPut, AutoPermission]
-    public Task<IActionResult> ManageRoles([FromBody] ManageMenuRoleCommand command) => Sender(command);
-
     [HttpGet, AutoPermission]
     public async Task<IActionResult> Search([FromQuery] SearchMenuQuery query) => await Sender(query);
 
     [HttpGet, AutoPermission]
     public async Task<IActionResult> DropDown([FromQuery] MenuDropDownQuery query) => await Sender(query);
+
+    [HttpGet, AutoPermission(true)]
+    public async Task<IActionResult> MenuVersion([FromQuery] MenuVersionQuery query) => await Sender(query);
+    
+    [HttpGet, AutoPermission(true)]
+    public async Task<IActionResult> SideBar([FromQuery] SideBarMenuQuery query) => await Sender(query);
+
+
+
+    [HttpGet, AutoPermission]
+    public async Task<IActionResult> MenuServiceDropDown([FromQuery] MenuServiceDropDownQuery query) => await Sender(query);
+
+    [HttpPut, AutoPermission]
+    public Task<IActionResult> ManageServices([FromBody] ManageMenuServiceCommand command) => Sender(command);
+
+    [HttpGet, AutoPermission]
+    public async Task<IActionResult> MenuRoleDropDown([FromQuery] MenuRoleDropDownQuery query) => await Sender(query);
+
+    [HttpPut, AutoPermission]
+    public Task<IActionResult> ManageRoles([FromBody] ManageMenuRoleCommand command) => Sender(command);
+
 }

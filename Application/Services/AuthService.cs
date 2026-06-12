@@ -1,7 +1,7 @@
 ﻿using Application.Common.Interfaces.Generals;
 using Application.Common.Interfaces.Services;
-using Application.Features.Auth.Models;
-using Application.Features.MenuFeature.Models;
+using Application.Features.AuthFeature.AuthManagement.Models;
+using Application.Features.MenuFeature.MenuManagement.Models;
 using Application.Features.RoleFeatures.RoleManagement.Models;
 using Application.Features.ServiceFeatures.Models;
 using Aurora.Jwt.Models;
@@ -47,7 +47,6 @@ public class AuthService(
         List<MenuDto> userMenus = await uow.Menus.GetMenusByRoleIds(userRoleIds, ct);
         List<ServiceDto> userServices = await uow.Services.GetServicesByRoleIds(userRoleIds, ct);
         
-
         // 5. تولید Access Token
         var payload = new TokenPayload
         {

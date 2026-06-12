@@ -33,4 +33,15 @@ public class UserRoleRepository(MyContext context)
             dbSet.Remove(entity);
         }
     }
+
+    public async Task SyncUserRolesAsync(long userId, IEnumerable<int> roleIds, CancellationToken ct = default)
+    {
+        // ۱. حذف تمام نقش‌های فعلی کاربر
+        var existing = await dbSet.Where(ur => ur.UserId == userId).ToListAsync(ct);
+        dbSet.RemoveRange(existing);
+
+        // ۲. افزودن نقش‌های جدید
+        var newLinks = roleIds.Select(rid => new UserRole { UserId = userId, RoleId = rid });
+        await dbSet.AddRangeAsync(newLinks, ct);
+    }
 }

@@ -1,4 +1,4 @@
-﻿using Application.Features.MenuFeature.Models;
+﻿using Application.Features.MenuFeature.MenuManagement.Models;
 using Application.Features.ServiceFeatures.Models;
 
 namespace Application.Services.Models;

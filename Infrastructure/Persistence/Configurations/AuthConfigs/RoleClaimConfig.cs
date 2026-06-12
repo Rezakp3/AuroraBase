@@ -19,6 +19,6 @@ public class RoleClaimConfig : IEntityTypeConfiguration<RoleClaim>
             .HasOne(x => x.Role)
             .WithMany(x => x.Claims)
             .HasForeignKey(x => x.RoleId)
-            .OnDelete(DeleteBehavior.NoAction);
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }

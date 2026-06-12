@@ -7,4 +7,5 @@ public interface IRoleServiceRepository : IRepository<RoleService, int>
 {
     Task<HashSet<string>> GetPermittedIdentifiersAsync(int roleId, CancellationToken ct = default);
     Task SyncPermissionsAsync(int roleId, IEnumerable<int> serviceIds, CancellationToken ct = default);
+    Task<List<int>> SyncRolesForServiceAsync(int serviceId, IEnumerable<int> roleIds, CancellationToken ct = default);
 }

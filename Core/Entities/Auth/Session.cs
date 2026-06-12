@@ -2,7 +2,7 @@
 
 namespace Core.Entities.Auth;
 
-public class Session : BaseEntity<Guid>
+public class Session : BaseEntityWithDate<Guid>
 {
     #region Properties
 

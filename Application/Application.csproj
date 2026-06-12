@@ -37,8 +37,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Features\UsersFeature\Models\" />
-    <Folder Include="Features\UsersFeature\Queries\" />
+    <Folder Include="Features\AuthFeature\SessionManagement\Commands\" />
   </ItemGroup>
 
 </Project>

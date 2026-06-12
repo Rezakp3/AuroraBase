@@ -9,7 +9,8 @@ namespace Infrastructure.Persistence.Repositories.Cached;
 public class CachedUserRoleRepository(
     IUserRoleRepository _innerRepo,
     ICacheService _cache
-    ) : CachedRepositoryBase<UserRole, int>(_innerRepo, _cache), IUserRoleRepository
+    ) : CachedRepositoryBase<UserRole, int>(
+        _innerRepo, _cache), IUserRoleRepository
 {
     protected override string CachePrefix => "user_roles";
 
@@ -59,5 +60,15 @@ public class CachedUserRoleRepository(
         await _innerRepo.RemoveRoleFromUserAsync(userId, roleId, ct);
         // فقط باید دستی کش رو پاک کنیم
         await _cache.RemoveAsync(GetUserRolesKey(userId), ct);
+    }
+
+    public async Task SyncUserRolesAsync(long userId, IEnumerable<int> roleIds, CancellationToken ct = default)
+    {
+        // ۱. اجرای عملیات همگام‌سازی در دیتابیس
+        await _innerRepo.SyncUserRolesAsync(userId, roleIds, ct);
+
+        // ۲. ابطال کش نقش‌های این کاربر خاص
+        var userRolesKey = GetUserRolesKey(userId); // auth:user:{userId}:roles
+        await _cache.RemoveAsync(userRolesKey, ct);
     }
 }

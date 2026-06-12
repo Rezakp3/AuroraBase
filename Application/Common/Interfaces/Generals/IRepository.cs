@@ -121,6 +121,14 @@ public interface IRepository<TEntity, TKey> where TEntity : class where TKey : s
     Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default);
 
     /// <summary>
+    /// افزودن یک موجودیت جدید
+    /// </summary>
+    /// <param name="entity">موجودیت برای افزودن</param>
+    /// <param name="cancellationToken">توکن لغو عملیات</param>
+    /// <returns>موجودیت افزوده شده</returns>
+    TEntity Add(TEntity entity);
+
+    /// <summary>
     /// افزودن چندین موجودیت به صورت یکجا
     /// </summary>
     /// <param name="entities">لیست موجودیت‌ها برای افزودن</param>
