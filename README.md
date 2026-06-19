@@ -60,7 +60,6 @@ graph TD
       Jwt[Aurora.Jwt]
       Captcha[Aurora.Captcha]
       Logger[Aurora.Logger]
-      Email[EmailSender]
     end
 
     Api -. uses .-> Modules
@@ -89,7 +88,6 @@ AuroraBase/
 ├── Aurora.ChacheSetting/       # تنظیمات/مدل‌های مرتبط با کش
 ├── Aurora.Jwt/                 # زیرساخت تولید و اعتبارسنجی JWT
 ├── Aurora.Logger/              # زیرساخت لاگینگ
-├── EmailSender/                # در وضعیت فعلی پروژه استفاده عملیاتی ندارد
 └── Utils/                      # ابزارها و Extensionهای عمومی
 ```
 
@@ -184,7 +182,6 @@ Swagger (نمونه):
 - ✅ **JWT Token Pair** (Access + Refresh) بعد از تایید OTP
 - ✅ قابلیت اعمال **Role/Claim-based Authorization**
 - ℹ️ ماژول **Aurora.Captcha** در پروژه وجود دارد اما **فعلاً فعال/استفاده نشده**
-- ℹ️ ماژول **EmailSender** موجود است اما **در حال حاضر استفاده نمی‌شود**
 
 ### فلو احراز هویت OTP
 
@@ -233,7 +230,6 @@ sequenceDiagram
 - **Aurora.Cache**: Abstraction برای کشینگ و افزایش کارایی
 - **Aurora.Logger**: ثبت لاگ‌های ساختاریافته
 - **Aurora.Captcha**: آماده استفاده، ولی در فاز فعلی پروژه غیرفعال
-- **EmailSender**: موجود ولی غیرفعال در فاز فعلی
 
 ---
 
