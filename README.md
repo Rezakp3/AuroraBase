@@ -31,7 +31,6 @@
   - [OTP Authentication Flow](#5-otp-authentication-flow)
   - [Aurora.Logger](#6-auroralogger--لاگینگ-و-مانیتورینگ)
   - [Aurora.Captcha](#7-auroracaptcha--وضعیت-فعلی)
-  - [EmailSender](#8-emailsender--وضعیت-فعلی)
 - [نمونه قرارداد API](#-نمونه-قرارداد-api)
 - [بهترین‌تمرین‌ها](#-بهترینتمرینها)
 - [مشارکت](#-مشارکت)
@@ -80,7 +79,6 @@ graph TD
       Jwt[Aurora.Jwt]
       Captcha[Aurora.Captcha]
       Logger[Aurora.Logger]
-      Email[EmailSender]
     end
 
     Api -. uses .-> Modules
@@ -109,7 +107,6 @@ AuroraBase/
 ├── Aurora.ChacheSetting/
 ├── Aurora.Jwt/
 ├── Aurora.Logger/
-├── EmailSender/                # فعلاً استفاده عملیاتی ندارد
 └── Utils/
 ```
 
@@ -434,13 +431,6 @@ _logger.LogInformation("OTP verified for user {UserId} with correlation {Correla
 - ماژول در پروژه وجود دارد ✅
 - در جریان فعلی عملیاتی استفاده نمی‌شود ℹ️
 - در صورت نیاز می‌توان برای endpointهای حساس (request-otp/login) فعال کرد
-
----
-
-## 8) EmailSender — وضعیت فعلی
-
-- ماژول موجود است ✅
-- در پیاده‌سازی فعلی استفاده عملیاتی ندارد ℹ️
 
 ---
 
