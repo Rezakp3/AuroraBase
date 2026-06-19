@@ -2,19 +2,18 @@
 
 # 🌟 AuroraBase
 
-### Enterprise-Grade .NET 8 Web API Boilerplate (Clean Architecture + CQRS)
+### قالب زیرساخت حرفه‌ای برای Web API با .NET 8 (Clean Architecture + CQRS)
 
 [![.NET Version](https://img.shields.io/badge/.NET-8.0-512BD4?style=for-the-badge&logo=dotnet)](https://dotnet.microsoft.com/)
 [![C# Version](https://img.shields.io/badge/C%23-12.0-239120?style=for-the-badge&logo=c-sharp)](https://learn.microsoft.com/dotnet/csharp/)
 [![EF Core](https://img.shields.io/badge/EF%20Core-8.0-512BD4?style=for-the-badge)](https://learn.microsoft.com/ef/core/)
 [![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)](LICENSE)
 
-**AuroraBase** یک بویلرپلیت حرفه‌ای برای توسعه Web API در مقیاس سازمانی است که با تمرکز بر  
-**Clean Architecture**, **CQRS**, **امنیت چندلایه**, **کشینگ ماژولار** و **قابلیت توسعه‌پذیری بالا** طراحی شده است.
+**AuroraBase** یک بویلرپلیت ماژولار برای ساخت APIهای مقیاس‌پذیر است که با تمرکز بر **معماری تمیز**، **CQRS**، **احراز هویت OTP + JWT**، **کشینگ** و **قابلیت نگهداری بالا** طراحی شده است.
 
 [🚀 شروع سریع](#-شروع-سریع) •
 [🏛️ معماری](#️-معماری-و-جریان-وابستگی) •
-[📦 ساختار پروژه](#-ساختار-پروژه) •
+[📂 ساختار پروژه](#-ساختار-پروژه) •
 [⚙️ پیکربندی](#️-پیکربندی) •
 [🔐 امنیت](#-امنیت) •
 [🤝 مشارکت](#-مشارکت)
@@ -23,38 +22,37 @@
 
 ---
 
-## 📖 معرفی
+## 📖 معرفی پروژه
 
-در پروژه‌های واقعی، پیاده‌سازی همزمان معماری تمیز، امنیت JWT، کپچا، کش، لاگینگ، اعتبارسنجی، و مدیریت تراکنش‌ها زمان‌بر و پرخطاست.  
-AuroraBase این دغدغه‌ها را به‌صورت **زیرساخت آماده، قابل نگهداری و ماژولار** ارائه می‌دهد تا تیم توسعه بتواند سریع‌تر روی منطق کسب‌وکار تمرکز کند.
+در پروژه‌های واقعی، آماده‌سازی زیرساخت‌هایی مثل معماری استاندارد، مدیریت تراکنش، امنیت، لاگینگ و کش زمان‌بر است.  
+**AuroraBase** این مسیر را با یک اسکلت حرفه‌ای و قابل توسعه کوتاه می‌کند تا تیم توسعه سریع‌تر روی منطق کسب‌وکار تمرکز کند.
 
 ---
 
 ## ✨ ویژگی‌های کلیدی
 
-- ✅ **Clean Architecture** با جداسازی کامل لایه‌ها
-- ✅ **CQRS + MediatR** برای تفکیک دستورات و پرس‌وجوها
-- ✅ **Repository + Unit of Work** برای مدیریت استاندارد دیتابیس
-- ✅ **JWT Authentication (Access/Refresh Token)** به‌همراه Role/Claim
-- ✅ **Captcha داخلی** برای جلوگیری از درخواست‌های مخرب
-- ✅ **Caching ماژولار** (In-Memory / Distributed)
-- ✅ **Structured Logging** برای مانیتورینگ و اشکال‌زدایی
-- ✅ **Pagination دوگانه** (Offset + Cursor/Keyset) برای کارایی بالا
-- ✅ **Validation** با الگوهای تمیز در لایه Application
-- ✅ **آماده توسعه برای محیط Production**
+- ✅ **Clean Architecture** با جداسازی شفاف لایه‌ها
+- ✅ **CQRS + MediatR** برای تفکیک Command/Query
+- ✅ **Repository + Unit of Work** برای مدیریت تمیز دیتابیس و تراکنش
+- ✅ **OTP Login** به‌عنوان جریان اصلی احراز هویت
+- ✅ **JWT (Access/Refresh Token)** پس از اعتبارسنجی OTP
+- ✅ **Aurora.Cache** برای کشینگ ماژولار (In-Memory/Distributed)
+- ✅ **Aurora.Logger** برای لاگینگ ساختاریافته
+- ✅ **Dual Pagination** (Offset + Cursor/Keyset) برای مقیاس بالا
+- ✅ طراحی مناسب برای توسعه در محیط‌های Production
 
 ---
 
 ## 🏛️ معماری و جریان وابستگی
 
-معماری پروژه بر اساس **Dependency Rule** در Clean Architecture پیاده‌سازی شده:  
-لایه‌های داخلی مستقل از فریم‌ورک و زیرساخت هستند.
+معماری پروژه بر اساس **Dependency Rule** در Clean Architecture است؛  
+لایه‌های داخلی به لایه‌های خارجی وابسته نیستند.
 
 ```mermaid
 graph TD
     Api[Api / Web Layer] --> Application[Application / CQRS + UseCases]
     Application --> Core[Core / Domain]
-    Infrastructure[Infrastructure / Persistence + External Services] --> Core
+    Infrastructure[Infrastructure / Persistence + Integrations] --> Core
     Api --> Infrastructure
 
     subgraph Modules
@@ -65,16 +63,16 @@ graph TD
       Email[EmailSender]
     end
 
-    Api -. consumes .-> Modules
-    Infrastructure -. consumes .-> Modules
+    Api -. uses .-> Modules
+    Infrastructure -. uses .-> Modules
 ```
 
-### لایه‌ها
+### نقش لایه‌ها
 
-- **Core**: موجودیت‌ها، قراردادها، قواعد دامنه، Exceptionهای دامنه
-- **Application**: Command/Query/Handler، DTO، Validation، Use Caseها
-- **Infrastructure**: EF Core، Repositoryها، DbContext، Migrationها، سرویس‌های خارجی
-- **Api**: Controllerها، Middlewareها، DI، تنظیمات Startup
+- **Core**: موجودیت‌ها، قراردادها، قوانین دامنه
+- **Application**: Use Caseها، Command/Query، Handlerها، Validation
+- **Infrastructure**: EF Core، Repositoryها، پیاده‌سازی سرویس‌ها
+- **Api**: Controllerها، Middlewareها، DI، تنظیمات اجرا
 
 ---
 
@@ -82,44 +80,42 @@ graph TD
 
 ```text
 AuroraBase/
-├── Api/                        # Presentation Layer (Controllers, Middleware, DI, Config)
-├── Application/                # CQRS, Handlers, DTOs, Validators
-├── Core/                       # Entities, Interfaces, Domain Exceptions
-├── Infrastructure/             # EF Core, DbContext, Repositories, Migrations
-├── Aurora.Cache/               # Caching abstraction & implementations
-├── Aurora.Captcha/             # Captcha generator (Base64 + Id/Code flow)
-├── Aurora.ChacheSetting/       # Cache config models/options
-├── Aurora.Jwt/                 # JWT generation/validation services
-├── Aurora.Logger/              # Logging infrastructure
-├── EmailSender/                # SMTP email sender module
-└── Utils/                      # Shared extensions/helpers
+├── Api/                        # لایه ارائه (Controllers, Middlewares, Startup/DI)
+├── Application/                # CQRS (Commands, Queries, Handlers, Validators, DTOs)
+├── Core/                       # Domain (Entities, Interfaces, Domain Rules)
+├── Infrastructure/             # Persistence (DbContext, Repositories, Migrations)
+├── Aurora.Cache/               # ماژول کش
+├── Aurora.Captcha/             # موجود در پروژه (فعلاً در فلو عملیاتی استفاده نشده)
+├── Aurora.ChacheSetting/       # تنظیمات/مدل‌های مرتبط با کش
+├── Aurora.Jwt/                 # زیرساخت تولید و اعتبارسنجی JWT
+├── Aurora.Logger/              # زیرساخت لاگینگ
+├── EmailSender/                # در وضعیت فعلی پروژه استفاده عملیاتی ندارد
+└── Utils/                      # ابزارها و Extensionهای عمومی
 ```
-
-> نکته: اگر نام `Aurora.ChacheSetting` عمداً انتخاب نشده باشد، بهتر است در آینده به `Aurora.CacheSetting` اصلاح شود.
 
 ---
 
 ## 🚀 شروع سریع
 
-## پیش‌نیازها
+### پیش‌نیازها
 
 - .NET SDK 8.0
 - SQL Server
-- (اختیاری) ابزار EF Core CLI:
+- (اختیاری) EF CLI:
   ```bash
   dotnet tool install --global dotnet-ef
   ```
 
-## 1) کلون پروژه
+### 1) کلون مخزن
 
 ```bash
 git clone https://github.com/Rezakp3/AuroraBase.git
 cd AuroraBase
 ```
 
-## 2) تنظیمات `appsettings.json`
+### 2) تنظیم `appsettings.json`
 
-فایل `Api/appsettings.json` را بر اساس محیط خود تنظیم کنید:
+فایل `Api/appsettings.json` را بر اساس محیط خود مقداردهی کنید:
 
 ```json
 {
@@ -140,13 +136,13 @@ cd AuroraBase
 }
 ```
 
-## 3) اعمال Migration دیتابیس
+### 3) اعمال Migration
 
 ```bash
 dotnet ef database update --project Infrastructure --startup-project Api
 ```
 
-## 4) اجرای API
+### 4) اجرای پروژه
 
 ```bash
 cd Api
@@ -160,194 +156,134 @@ Swagger (نمونه):
 
 ## ⚙️ پیکربندی
 
-## ConnectionStrings
-
+### ConnectionStrings
 - `DefaultConnection`: رشته اتصال SQL Server
 
-## JwtSettings
+### JwtSettings
+- `SecretKey`: کلید امضا (ترجیحاً طولانی و تصادفی)
+- `Issuer`: صادرکننده
+- `Audience`: مخاطب
+- `AccessTokenExpirationMinutes`
+- `RefreshTokenExpirationDays`
 
-- `SecretKey`: کلید امضا (حداقل ۳۲ کاراکتر تصادفی و امن)
-- `Issuer`: صادرکننده توکن
-- `Audience`: مخاطب توکن
-- `AccessTokenExpirationMinutes`: انقضای توکن دسترسی
-- `RefreshTokenExpirationDays`: انقضای رفرش‌توکن
+### CacheSettings
+- `AbsoluteExpirationInMinutes`
+- `SlidingExpirationInMinutes`
 
-## CacheSettings
-
-- `AbsoluteExpirationInMinutes`: انقضای مطلق
-- `SlidingExpirationInMinutes`: انقضای لغزشی
-
-## SMTP (در صورت استفاده از EmailSender)
-
-- Host / Port / Username / Password / From  
-(پیشنهاد: نگهداری امن با Secret Manager یا Environment Variables)
+### OTP
+- جریان اصلی ورود بر مبنای OTP است.
+- تنظیمات دقیق OTP را مطابق پیاده‌سازی فعلی شما در لایه‌های `Application/Infrastructure` نگهداری و مدیریت کنید.
 
 ---
 
 ## 🔐 امنیت
 
-AuroraBase امنیت را به‌صورت چندلایه پیاده‌سازی می‌کند:
+وضعیت امنیت فعلی پروژه:
 
-- **JWT-based Auth** با Access/Refresh Token
-- **Captcha validation** در فرایندهای حساس (مثل Login)
-- **Role/Claim-based Authorization**
-- **ورود/خروج امن و مدیریت session/token lifecycle**
-- **قابلیت توسعه برای سیاست‌های پیشرفته (Rate limiting, lockout, etc.)**
+- ✅ **OTP Login** (جریان اصلی احراز هویت)
+- ✅ **JWT Token Pair** (Access + Refresh) بعد از تایید OTP
+- ✅ قابلیت اعمال **Role/Claim-based Authorization**
+- ℹ️ ماژول **Aurora.Captcha** در پروژه وجود دارد اما **فعلاً فعال/استفاده نشده**
+- ℹ️ ماژول **EmailSender** موجود است اما **در حال حاضر استفاده نمی‌شود**
 
-### جریان نمونه Captcha + Login
+### فلو احراز هویت OTP
 
 ```mermaid
 sequenceDiagram
     participant U as User
     participant A as API
-    U->>A: GET /generate-captcha
-    A->>U: { captchaId, imageBase64 }
 
-    U->>A: POST /login (username, password, captchaId, captchaCode)
-    alt captcha invalid
-        A-->>U: 400 BadRequest (Invalid captcha)
-    else captcha valid
-        A->>A: Validate credentials
+    U->>A: درخواست OTP
+    A->>A: تولید OTP + ذخیره موقت با زمان انقضا
+    A-->>U: پاسخ موفق برای ادامه فرآیند
+
+    U->>A: ارسال OTP برای تایید
+    alt OTP نامعتبر/منقضی
+        A-->>U: خطای اعتبارسنجی
+    else OTP معتبر
         A-->>U: AccessToken + RefreshToken
     end
 ```
 
 ---
 
-## 📄 نمونه کدنویسی CQRS (خلاصه)
+## ⚡ صفحه‌بندی پیشرفته (Dual Pagination)
 
-### Command
+پروژه از دو مدل صفحه‌بندی پشتیبانی می‌کند:
 
-```csharp
-public record CreateProductCommand(string Name, decimal Price, int Stock) : IRequest<Guid>;
-```
+- **Offset/Page-Based**: ساده و مناسب داده‌های کم‌حجم
+- **Cursor/Keyset-Based**: سریع و پایدار برای داده‌های حجیم
 
-### Validator
+نمونه مقایسه کارایی (تقریبی):
 
-```csharp
-public class CreateProductCommandValidator : AbstractValidator<CreateProductCommand>
-{
-    public CreateProductCommandValidator()
-    {
-        RuleFor(x => x.Name).NotEmpty().MaximumLength(150);
-        RuleFor(x => x.Price).GreaterThan(0);
-        RuleFor(x => x.Stock).GreaterThanOrEqualTo(0);
-    }
-}
-```
-
-### Handler
-
-```csharp
-public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, Guid>
-{
-    private readonly IUnitOfWork _unitOfWork;
-
-    public CreateProductCommandHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
-
-    public async Task<Guid> Handle(CreateProductCommand request, CancellationToken cancellationToken)
-    {
-        var entity = new Product
-        {
-            Name = request.Name,
-            Price = request.Price,
-            Stock = request.Stock
-        };
-
-        await _unitOfWork.Products.AddAsync(entity);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
-
-        return entity.Id;
-    }
-}
-```
-
----
-
-## ⚡ Pagination پیشرفته (Offset + Cursor)
-
-برای لیست‌های کوچک، Offset مناسب است.  
-برای داده‌های حجیم، Cursor-based (Keyset) باعث پایداری زمان پاسخ می‌شود.
-
-| حجم داده | Offset | Cursor | بهبود تقریبی |
+| تعداد رکورد | Offset | Cursor | بهبود |
 |---:|---:|---:|---:|
-| 10K | 18ms | 2ms | 9x |
-| 100K | 160ms | 4ms | 40x |
-| 1M | 2200ms | 6ms | 366x |
-| 10M | 29400ms | 9ms | 3260x |
+| 10,000 | 18ms | 2ms | 9x |
+| 100,000 | 160ms | 4ms | 40x |
+| 1,000,000 | 2200ms | 6ms | 366x |
+| 10,000,000 | 29400ms | 9ms | 3260x |
 
-> اعداد بالا بنچمارک ادعایی پروژه هستند و بسته به ایندکس، سخت‌افزار، و کوئری واقعی تغییر می‌کنند.
-
----
-
-## 🧪 تست و کیفیت (پیشنهادی)
-
-اگر هنوز اضافه نشده، پیشنهاد می‌شود این موارد به پروژه افزوده شود:
-
-- Unit Tests برای Handlerها و Domain rules
-- Integration Tests برای API + DB
-- Lint/Format (EditorConfig + analyzers)
-- CI با GitHub Actions برای Build/Test/Publish
+> اعداد بسته به نوع کوئری، ایندکس و سخت‌افزار متفاوت خواهند بود.
 
 ---
 
-## 🛠️ راهنمای توسعه
+## 🧩 ماژول‌های داخلی
 
-### Branch naming پیشنهادی
+- **Aurora.Jwt**: تولید/اعتبارسنجی JWT و مدیریت چرخه توکن
+- **Aurora.Cache**: Abstraction برای کشینگ و افزایش کارایی
+- **Aurora.Logger**: ثبت لاگ‌های ساختاریافته
+- **Aurora.Captcha**: آماده استفاده، ولی در فاز فعلی پروژه غیرفعال
+- **EmailSender**: موجود ولی غیرفعال در فاز فعلی
+
+---
+
+## 🛠️ توسعه و نگهداری
+
+### پیشنهاد برای نام‌گذاری Branch
 - `feature/...`
 - `fix/...`
 - `refactor/...`
 - `chore/...`
 
-### Commit convention پیشنهادی
+### پیشنهاد برای پیام Commit
 - `feat: ...`
 - `fix: ...`
 - `docs: ...`
 - `refactor: ...`
-- `test: ...`
 - `chore: ...`
 
 ---
 
 ## 🤝 مشارکت
 
-1. Fork کنید
-2. Branch جدید بسازید:
+1. پروژه را Fork کنید  
+2. یک Branch جدید بسازید:
    ```bash
-   git checkout -b feature/your-feature-name
+   git checkout -b feature/your-feature
    ```
 3. تغییرات را Commit کنید:
    ```bash
-   git commit -m "feat: add ..."
+   git commit -m "feat: add your feature"
    ```
 4. Push کنید:
    ```bash
-   git push origin feature/your-feature-name
+   git push origin feature/your-feature
    ```
 5. Pull Request بسازید
 
 ---
 
-## 🗺️ Roadmap پیشنهادی
+## 📌 نقشه راه پیشنهادی
 
-- [ ] Dockerfile + docker-compose برای اجرای سریع
-- [ ] GitHub Actions برای CI/CD
-- [ ] Health Checks + Observability (OpenTelemetry)
-- [ ] Centralized Exception Handling Middleware
-- [ ] Multi-tenant readiness
-- [ ] Seed data + demo scenarios
-- [ ] API Versioning + Rate Limiting
+- [ ] Docker / Docker Compose
+- [ ] CI با GitHub Actions
+- [ ] تست‌های Unit و Integration
+- [ ] Observability (HealthCheck + Metrics + Tracing)
+- [ ] Rate Limiting و Hardening امنیتی بیشتر
 
 ---
 
 ## 📜 License
 
 این پروژه تحت مجوز **MIT** منتشر شده است.  
-برای جزئیات، فایل [LICENSE](LICENSE) را ببینید.
-
----
-
-## 💬 تماس و پشتیبانی
-
-اگر سوال، ایده یا باگی داشتید، لطفاً از طریق **Issues** در GitHub ثبت کنید:
-`https://github.com/Rezakp3/AuroraBase/issues`
+برای جزئیات بیشتر فایل [LICENSE](LICENSE) را بررسی کنید.
