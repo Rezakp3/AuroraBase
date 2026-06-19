@@ -393,11 +393,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasDefaultValue("General");
 
-                    b.Property<bool>("IsEncrypted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -417,7 +412,7 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("IX_Settings_Group_Key");
 
-                    b.ToTable("Settings", "Config");
+                    b.ToTable("Settings", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.Auth.Menu", b =>

@@ -14,9 +14,6 @@ namespace Infrastructure.Migrations
             migrationBuilder.EnsureSchema(
                 name: "Auth");
 
-            migrationBuilder.EnsureSchema(
-                name: "Config");
-
             migrationBuilder.CreateTable(
                 name: "Menu",
                 schema: "Auth",
@@ -24,9 +21,12 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Icon = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: true),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Route = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ParentId = table.Column<int>(type: "int", nullable: true)
+                    Route = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    ParentId = table.Column<int>(type: "int", nullable: true),
+                    Priority = table.Column<int>(type: "int", nullable: false),
+                    IsActive = table.Column<bool>(type: "bit", nullable: false, defaultValue: true)
                 },
                 constraints: table =>
                 {
@@ -46,7 +46,7 @@ namespace Infrastructure.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Name = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     Title = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
@@ -64,7 +64,7 @@ namespace Infrastructure.Migrations
                     ServiceName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     Address = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false),
-                    ServiceIdentifier = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    ServiceIdentifier = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -73,7 +73,6 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateTable(
                 name: "Settings",
-                schema: "Config",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -82,8 +81,7 @@ namespace Infrastructure.Migrations
                     Key = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     Value = table.Column<string>(type: "nvarchar(2000)", maxLength: 2000, nullable: false),
                     Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    DataType = table.Column<int>(type: "int", nullable: false, defaultValue: 1),
-                    IsEncrypted = table.Column<bool>(type: "bit", nullable: false, defaultValue: false)
+                    DataType = table.Column<int>(type: "int", nullable: false, defaultValue: 1)
                 },
                 constraints: table =>
                 {
@@ -98,7 +96,7 @@ namespace Infrastructure.Migrations
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LastLoginDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 2),
+                    Status = table.Column<int>(type: "int", nullable: false, defaultValue: 0),
                     FName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     LName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     PhoneNumber = table.Column<string>(type: "nvarchar(13)", maxLength: 13, nullable: true),
@@ -236,7 +234,8 @@ namespace Infrastructure.Migrations
                     IsRevoked = table.Column<bool>(type: "bit", nullable: false, defaultValue: false),
                     DeviceName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Jti = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<long>(type: "bigint", nullable: false)
+                    UserId = table.Column<long>(type: "bigint", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false, defaultValueSql: "GETDATE()")
                 },
                 constraints: table =>
                 {
@@ -298,7 +297,8 @@ namespace Infrastructure.Migrations
                         column: x => x.UserId,
                         principalSchema: "Auth",
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -360,13 +360,11 @@ namespace Infrastructure.Migrations
 
             migrationBuilder.CreateIndex(
                 name: "IX_Settings_Group",
-                schema: "Config",
                 table: "Settings",
                 column: "Group");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Settings_Group_Key",
-                schema: "Config",
                 table: "Settings",
                 columns: new[] { "Group", "Key" },
                 unique: true);
@@ -415,8 +413,7 @@ namespace Infrastructure.Migrations
                 schema: "Auth");
 
             migrationBuilder.DropTable(
-                name: "Settings",
-                schema: "Config");
+                name: "Settings");
 
             migrationBuilder.DropTable(
                 name: "UserClaim",

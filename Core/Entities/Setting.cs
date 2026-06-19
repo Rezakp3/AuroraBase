@@ -9,5 +9,4 @@ public class Setting : BaseEntity<int>
     public string Value { get; set; }              // مقدار (همیشه string در DB)
     public string Description { get; set; }        // توضیحات
     public ESettingDataType DataType { get; set; } // نوع داده برای validation
-    public bool IsEncrypted { get; set; }          // رمزنگاری شده؟
 }

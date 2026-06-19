@@ -1,27 +1,32 @@
 ﻿using Application.Common.Interfaces.Generals;
 using Application.Common.Models;
-using Application.Features.RoleFeatures.RoleClaimFeatures.Models;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Text;
 using Utils.CustomAttributes;
 
 namespace Application.Features.RoleFeatures.RoleClaimFeatures.Commands;
 
-public class UpdateRoleClaimCommand : RoleClaimDto, IBaseRequest
+public class DeleteRoleClaimCommand : IBaseRequest
 {
     [RequiredFa, DisplayName("آیدی")]
     public int Id { get; set; }
 }
 
-internal class UpdateRoleClaimHandler(IUnitOfWork uow) : IBaseHandler<UpdateRoleClaimCommand>
+internal class DeleteRoleClaimHandler(IUnitOfWork uow) : IBaseHandler<DeleteRoleClaimCommand>
 {
-    public async Task<ApiResult> Handle(UpdateRoleClaimCommand request, CancellationToken cancellationToken)
+    public async Task<ApiResult> Handle(DeleteRoleClaimCommand request, CancellationToken cancellationToken)
     {
         var claim = await uow.Roles.GetClaimByIdAsync(request.Id, cancellationToken);
+
         if (claim is null)
             return ApiResult.NotFound("کلیم");
-        claim.Type = request.Type;
-        claim.Value = request.Value;
+
+        uow.Roles.DeleteClaim(claim);
+        
         var res = await uow.SaveChangesAsync(cancellationToken);
+
         return res.ToApiResult();
     }
 }

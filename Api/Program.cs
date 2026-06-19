@@ -16,6 +16,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Serilog;
 using System.Text;
+using Utils.Helpers;
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
@@ -25,10 +26,11 @@ Log.Logger = new LoggerConfiguration()
 var builder = WebApplication.CreateBuilder(args);
 builder.Host.UseSerilog();
 
-
 // Configuration
 var services = builder.Services;
 var appsetting = builder.Configuration.Get<AppSetting>() ?? new();
+
+CryptoHelper.SetKey(appsetting.CryptoSettings.Key);
 
 services.AddSingleton(appsetting)
     .AddSingleton(appsetting.AuroraLog);

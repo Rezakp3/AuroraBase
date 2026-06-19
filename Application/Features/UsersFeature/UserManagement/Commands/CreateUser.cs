@@ -31,12 +31,18 @@ internal class CreateUserCommandHandler(IUnitOfWork uow)
     public async Task<ApiResult> Handle(CreateUserCommand request, CancellationToken cancellationToken)
     {
         var exist = await uow.Users.PhoneNumberExistForAdd(request.PhoneNumber, cancellationToken);
-        
+
         if (exist)
             return ApiResult.Fail("شماره همراه از قبل موجود است");
 
-        var user = request.Adapt<User>();
-        user.UserRoles = [ new UserRole { RoleId = request.RoleId }];
+        var user = new User
+        {
+            FName = request.FirstName,
+            PhoneNumber = request.PhoneNumber,
+            LName = request.LastName,
+            UserRoles = [new UserRole { RoleId = request.RoleId }]
+        };
+
 
         await uow.Users.AddAsync(user, cancellationToken);
         var res = await uow.SaveChangesAsync(cancellationToken);

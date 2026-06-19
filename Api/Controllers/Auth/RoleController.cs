@@ -1,5 +1,6 @@
 ﻿using Api.Attributes;
 using Application.Features.RoleFeatures.RoleClaimFeatures.Commands;
+using Application.Features.RoleFeatures.RoleClaimFeatures.Queries;
 using Application.Features.RoleFeatures.RoleManagement.Commands;
 using Application.Features.RoleFeatures.RoleManagement.Queries;
 using Application.Features.RoleFeatures.RoleRelations.Commands;
@@ -19,9 +20,6 @@ public class RoleController(IMediator mediator) : BaseController(mediator)
 
     [HttpDelete, AutoPermission]
     public async Task<IActionResult> Delete([FromQuery] DeleteRoleCommand command) => await Sender(command);
-
-    [HttpPost, AutoPermission]
-    public async Task<IActionResult> AddClaims([FromBody] AddClaimsToRoleCommand command) => await Sender(command);
 
     [HttpGet, AutoPermission]
     public Task<IActionResult> Search([FromQuery] SearchRoleQuery command) => Sender(command);
@@ -43,5 +41,16 @@ public class RoleController(IMediator mediator) : BaseController(mediator)
     [HttpPut, AutoPermission]
     public async Task<IActionResult> ManageMenus([FromBody] ManageRoleMenusCommand command) => await Sender(command);
 
+    [HttpPost, AutoPermission]
+    public async Task<IActionResult> AddClaim([FromBody] AddRoleClaimCommand command) => await Sender(command);
+
+    [HttpPut, AutoPermission]
+    public async Task<IActionResult> UpdateClaim([FromBody] UpdateRoleClaimCommand command) => await Sender(command);
+
+    [HttpDelete, AutoPermission]
+    public async Task<IActionResult> DeleteClaim([FromQuery] DeleteRoleClaimCommand command) => await Sender(command);
+    
+    [HttpGet, AutoPermission]
+    public async Task<IActionResult> GetRoleClaims([FromQuery] GetRoleClaimsQuery command) => await Sender(command);
 
 }

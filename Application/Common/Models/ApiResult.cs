@@ -123,7 +123,7 @@ public static class ApiResultHelper
         => res ? ApiResult.Success() : ApiResult.Fail();
 
     public static ApiResult ToApiResult(this int res)
-        => res <= 0 ? ApiResult.Success() : ApiResult.Fail();
+        => res <= 0 ? ApiResult.Fail() : ApiResult.Success();
 }
 public class ValidationError
 {

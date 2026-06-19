@@ -40,7 +40,7 @@ public class UserController(IMediator mediator) : BaseController(mediator)
     #region manage claims
 
     [HttpPost, AutoPermission]
-    public async Task<IActionResult> AddClaim([FromBody] AddUserClaimCommand command)
+    public async Task<IActionResult> AddUserClaim([FromBody] AddUserClaimCommand command)
         => await Sender(command);
 
     [HttpPut, AutoPermission]

@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(MyContext))]
-    [Migration("20260611085557_changeDeletePolicy")]
-    partial class changeDeletePolicy
+    [Migration("20260619151545_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -248,6 +248,11 @@ namespace Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasDefaultValueSql("NEWID()");
 
+                    b.Property<DateTime>("CreatedDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("GETDATE()");
+
                     b.Property<string>("DeviceName")
                         .HasColumnType("nvarchar(max)");
 
@@ -327,7 +332,7 @@ namespace Infrastructure.Migrations
                     b.Property<int>("Status")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
-                        .HasDefaultValue(2);
+                        .HasDefaultValue(0);
 
                     b.Property<int>("TryCount")
                         .HasColumnType("int");
@@ -391,11 +396,6 @@ namespace Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasDefaultValue("General");
 
-                    b.Property<bool>("IsEncrypted")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bit")
-                        .HasDefaultValue(false);
-
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -415,7 +415,7 @@ namespace Infrastructure.Migrations
                         .IsUnique()
                         .HasDatabaseName("IX_Settings_Group_Key");
 
-                    b.ToTable("Settings", "Config");
+                    b.ToTable("Settings", (string)null);
                 });
 
             modelBuilder.Entity("Core.Entities.Auth.Menu", b =>

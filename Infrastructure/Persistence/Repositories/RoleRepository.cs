@@ -16,21 +16,6 @@ namespace Infrastructure.Persistence.Repositories;
 public class RoleRepository(MyContext context)
     : Repository<Role, int>(context), IRoleRepository
 {
-    public void AddClaims(int roleId, IEnumerable<RoleClaimDto> claims, CancellationToken cancellationToken)
-    {
-        var validClaims = (from c in claims
-                           from rc in context.RoleClaims.Where(x => x.RoleId == roleId && c.Type == x.Type && c.Value == x.Value).DefaultIfEmpty()
-                           where rc is null
-                           select new RoleClaim
-                           {
-                               RoleId = roleId,
-                               Type = c.Type,
-                               Value = c.Value
-                           }).ToList();
-
-        context.RoleClaims.AddRange(validClaims);
-    }
-
     public async Task AddRangeMenues(int roleId, IEnumerable<int> menuIds, CancellationToken ct)
     {
         var menues = menuIds.Select(x => new RoleMenu
@@ -44,9 +29,6 @@ public class RoleRepository(MyContext context)
 
     public async Task DeleteMenues(int roleId, CancellationToken ct)
         => await context.RoleMenus.Where(x => x.RoleId == roleId).ExecuteDeleteAsync(ct);
-
-    public void DeleteRoleClaims(IEnumerable<int> ids)
-        => context.RoleClaims.RemoveRange(context.RoleClaims.Where(x => ids.Contains(x.Id)));
 
     public async Task<CursorPaginatedList<BaseDropDown<int>, int>> DropDown(string search, CursorPagingOption<int> pagingOption, CancellationToken ct)
     {
@@ -128,4 +110,10 @@ public class RoleRepository(MyContext context)
 
         return await PaginationHelper.ApplyPageBasedPaginationAsync(q, query, ct);
     }
+
+    public void AddClaim(RoleClaim claim, CancellationToken cancellationToken)
+        => context.RoleClaims.Add(claim);
+
+    public void DeleteClaim(RoleClaim claim)
+        => context.RoleClaims.Remove(claim);
 }

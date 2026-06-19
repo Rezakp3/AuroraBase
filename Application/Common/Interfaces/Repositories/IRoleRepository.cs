@@ -10,8 +10,6 @@ namespace Application.Common.Interfaces.Repositories;
 public interface IRoleRepository : IRepository<Role, int>
 {
     Task<PaginatedList<RoleDto>> Search(RoleIm query, CancellationToken ct);
-    void AddClaims(int roleId, IEnumerable<RoleClaimDto> claims, CancellationToken cancellationToken);
-    void DeleteRoleClaims(IEnumerable<int> ids);
     Task<RoleClaim> GetClaimByIdAsync(int id, CancellationToken cancellationToken);
     Task<IEnumerable<RoleClaimDto>> GetClaimsByRoleIdAsync(int roleId, CancellationToken cancellationToken);
     Task<CursorPaginatedList<BaseDropDown<int>, int>> DropDown(string search, CursorPagingOption<int> pagingOption, CancellationToken ct);
@@ -20,4 +18,6 @@ public interface IRoleRepository : IRepository<Role, int>
     
     Task DeleteMenues(int roleId, CancellationToken ct);
     Task AddRangeMenues(int roleId, IEnumerable<int> menuIds, CancellationToken ct);
+    void AddClaim(RoleClaim claim, CancellationToken cancellationToken);
+    void DeleteClaim(RoleClaim claim);
 }

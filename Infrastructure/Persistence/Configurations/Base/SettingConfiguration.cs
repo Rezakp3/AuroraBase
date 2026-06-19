@@ -2,6 +2,7 @@
 using Core.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
+using Utils.Helpers;
 
 namespace Infrastructure.Persistence.Configurations.Base;
 
@@ -9,7 +10,7 @@ public class SettingConfiguration : IEntityTypeConfiguration<Setting>
 {
     public void Configure(EntityTypeBuilder<Setting> builder)
     {
-        builder.ToTable("Settings", "Config");
+        builder.ToTable("Settings");
 
         builder.HasKey(x => x.Id);
 
@@ -17,13 +18,19 @@ public class SettingConfiguration : IEntityTypeConfiguration<Setting>
 
         builder.Property(x => x.Key).HasMaxLength(100).IsRequired();
 
-        builder.Property(x => x.Value).HasMaxLength(2000).IsRequired();
+        builder.Property(x => x.Value)
+            .HasMaxLength(2000)
+            .IsRequired()
+            .HasConversion(
+                v => v.Encrypt(), // موقع ذخیره در دیتابیس (انکریپت)
+                v => v.Decrypt()  // موقع خواندن از دیتابیس (دکریپت)
+            );
 
         builder.Property(x => x.Description).HasMaxLength(500).IsRequired(false);
 
         builder.Property(x => x.DataType).IsRequired().HasDefaultValue(ESettingDataType.String);
 
-        builder.Property(x => x.IsEncrypted).HasDefaultValue(false);
+
 
         // Composite unique index on Group + Key
         builder.HasIndex(x => new { x.Group, x.Key }).IsUnique().HasDatabaseName("IX_Settings_Group_Key");
